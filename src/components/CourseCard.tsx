@@ -1,5 +1,6 @@
 import { MdMoreVert, MdAssignment, MdAnnouncement } from 'react-icons/md';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,10 +29,17 @@ export const CourseCard = ({
   bannerColor = 'bg-primary',
   onClick 
 }: CourseCardProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/curso/${id}`);
+    onClick?.();
+  };
+
   return (
     <div 
       className="bg-card rounded-lg shadow-sm border border-border course-card-hover cursor-pointer overflow-hidden"
-      onClick={onClick}
+      onClick={handleClick}
     >
       {/* Course Banner */}
       <div className={`h-20 ${bannerColor} course-banner relative`}>

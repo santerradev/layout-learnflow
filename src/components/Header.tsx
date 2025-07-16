@@ -7,12 +7,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Header component following Google Classroom design patterns
  * Features: hamburger menu, platform logo, add course button, user menu
  */
 export const Header = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <header className="bg-card border-b border-border shadow-sm sticky top-0 z-50">
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
@@ -59,6 +69,10 @@ export const Header = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
+              <div className="px-2 py-1.5 text-sm font-medium">
+                {user?.name || user?.email}
+              </div>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <span>Meu perfil</span>
               </DropdownMenuItem>
@@ -66,7 +80,7 @@ export const Header = () => {
                 <span>Configurações</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
                 <span>Sair</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
