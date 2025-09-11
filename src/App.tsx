@@ -5,10 +5,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { MainLayout } from "@/components/MainLayout";
 import Index from "./pages/Index";
 import { Login } from "./pages/Login";
 import { Cadastro } from "./pages/Cadastro";
 import { Course } from "./pages/Course";
+import { Courses } from "./pages/Courses";
+import { Activities } from "./pages/Activities";
+import { People } from "./pages/People";
+import { Materials } from "./pages/Materials";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,7 +35,49 @@ const App = () => (
               path="/" 
               element={
                 <ProtectedRoute>
-                  <Index />
+                  <MainLayout>
+                    <Index />
+                  </MainLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/cursos" 
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Courses />
+                  </MainLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/atividades" 
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Activities />
+                  </MainLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/pessoas" 
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <People />
+                  </MainLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/materiais" 
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Materials />
+                  </MainLayout>
                 </ProtectedRoute>
               } 
             />
@@ -38,7 +85,9 @@ const App = () => (
               path="/curso/:id" 
               element={
                 <ProtectedRoute>
-                  <Course />
+                  <MainLayout>
+                    <Course />
+                  </MainLayout>
                 </ProtectedRoute>
               } 
             />

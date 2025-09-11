@@ -1,92 +1,82 @@
-import { MdMenu, MdAdd, MdAccountCircle } from 'react-icons/md';
+import { MdAdd, MdSchool, MdPerson, MdSettings, MdLogout } from 'react-icons/md';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 
 /**
- * Header component following Google Classroom design patterns
- * Features: hamburger menu, platform logo, add course button, user menu
+ * Header component - simplified for use inside MainLayout
  */
 export const Header = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+  const { logout, user } = useAuth();
 
   return (
-    <header className="bg-card border-b border-border shadow-sm sticky top-0 z-50">
-      <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
-        {/* Left section: Menu and Logo */}
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <MdMenu className="h-5 w-5" />
+    <div className="flex items-center justify-between w-full">
+      {/* Create/Join button */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-10 w-10">
+            <MdAdd className="h-5 w-5" />
+            <span className="sr-only">Criar ou participar de turma</span>
           </Button>
-          
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">E</span>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem>
+            <MdSchool className="mr-2 h-4 w-4" />
+            Participar da turma
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <MdAdd className="mr-2 h-4 w-4" />
+            Criar turma
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* User menu */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+            <Avatar className="h-10 w-10">
+              <AvatarFallback>
+                {user?.name?.charAt(0) || 'U'}
+              </AvatarFallback>
+            </Avatar>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium leading-none">
+                {user?.name || 'Usuário'}
+              </p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user?.email}
+              </p>
             </div>
-            <h1 className="text-xl font-medium text-foreground">
-              EduPlatform
-            </h1>
-          </div>
-        </div>
-
-        {/* Right section: Add button and User menu */}
-        <div className="flex items-center gap-2">
-          {/* Add Course Button */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <MdAdd className="h-6 w-6" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem>
-                <span>Participar de uma turma</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <span>Criar turma</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* User Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <MdAccountCircle className="h-8 w-8 text-secondary" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <div className="px-2 py-1.5 text-sm font-medium">
-                {user?.name || user?.email}
-              </div>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <span>Meu perfil</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <span>Configurações</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                <span>Sair</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-    </header>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <MdPerson className="mr-2 h-4 w-4" />
+            Perfil
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <MdSettings className="mr-2 h-4 w-4" />
+            Configurações
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={logout}>
+            <MdLogout className="mr-2 h-4 w-4" />
+            Sair
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
