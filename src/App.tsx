@@ -14,6 +14,9 @@ import { Courses } from "./pages/Courses";
 import { Activities } from "./pages/Activities";
 import { People } from "./pages/People";
 import { Materials } from "./pages/Materials";
+import { Profile } from "./pages/Profile";
+import { Notifications } from "./pages/Notifications";
+import { Settings } from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -87,6 +90,36 @@ const App = () => (
                 <ProtectedRoute>
                   <MainLayout>
                     <Course />
+                  </MainLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/perfil" 
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Profile />
+                  </MainLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/notificacoes" 
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Notifications />
+                  </MainLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/configuracoes" 
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Settings />
                   </MainLayout>
                 </ProtectedRoute>
               } 

@@ -33,8 +33,9 @@ const mainItems = [
 ];
 
 const settingsItems = [
-  { title: "Configurações", url: "/configuracoes", icon: MdSettings },
+  { title: "Perfil", url: "/perfil", icon: MdPeople },
   { title: "Notificações", url: "/notificacoes", icon: MdNotifications },
+  { title: "Configurações", url: "/configuracoes", icon: MdSettings },
 ];
 
 export function AppSidebar() {
@@ -80,7 +81,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Configurações</SidebarGroupLabel>
+          <SidebarGroupLabel>Conta</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {settingsItems.map((item) => (

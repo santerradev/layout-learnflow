@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { Header } from '@/components/Header';
 import { CourseHeader } from '@/components/CourseHeader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MuralTab } from '@/components/course/MuralTab';
@@ -42,9 +41,7 @@ export const Course = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
+    <div className="space-y-6">
       {/* Course Header */}
       <CourseHeader 
         title={mockCourse.title}
@@ -52,9 +49,8 @@ export const Course = () => {
         teacher={mockCourse.teacher}
         bannerColor={mockCourse.bannerColor}
       />
-      
       {/* Main Content with Tabs */}
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={handleTabChange as (value: string) => void}>
           {/* Tab Navigation */}
           <TabsList className="grid w-full grid-cols-3 mb-6">
@@ -76,7 +72,7 @@ export const Course = () => {
             <PeopleTab courseId={id || ''} />
           </TabsContent>
         </Tabs>
-      </main>
+      </div>
     </div>
   );
 };
