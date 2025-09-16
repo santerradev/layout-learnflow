@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { CourseHeader } from '@/components/CourseHeader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MuralTab } from '@/components/course/MuralTab';
+import { LessonsTab } from '@/components/course/LessonsTab';
 import { ActivitiesTab } from '@/components/course/ActivitiesTab';
 import { PeopleTab } from '@/components/course/PeopleTab';
 
@@ -16,7 +17,7 @@ const mockCourse = {
   description: 'Curso focado em matemática avançada para ensino médio'
 };
 
-type TabValue = 'mural' | 'atividades' | 'pessoas';
+type TabValue = 'mural' | 'aulas' | 'atividades' | 'pessoas';
 
 /**
  * Course page - Individual course view with tabs
@@ -29,7 +30,7 @@ export const Course = () => {
   // Get tab from URL params or default to 'mural'
   useEffect(() => {
     const tabParam = searchParams.get('tab') as TabValue;
-    if (tabParam && ['mural', 'atividades', 'pessoas'].includes(tabParam)) {
+    if (tabParam && ['mural', 'aulas', 'atividades', 'pessoas'].includes(tabParam)) {
       setActiveTab(tabParam);
     }
   }, [searchParams]);
@@ -53,8 +54,9 @@ export const Course = () => {
       <div className="max-w-7xl mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={handleTabChange as (value: string) => void}>
           {/* Tab Navigation */}
-          <TabsList className="grid w-full grid-cols-3 mb-6">
+          <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="mural">Mural</TabsTrigger>
+            <TabsTrigger value="aulas">Aulas</TabsTrigger>
             <TabsTrigger value="atividades">Atividades</TabsTrigger>
             <TabsTrigger value="pessoas">Pessoas</TabsTrigger>
           </TabsList>
@@ -62,6 +64,10 @@ export const Course = () => {
           {/* Tab Content */}
           <TabsContent value="mural" className="mt-0">
             <MuralTab courseId={id || ''} />
+          </TabsContent>
+
+          <TabsContent value="aulas" className="mt-0">
+            <LessonsTab courseId={id || ''} />
           </TabsContent>
 
           <TabsContent value="atividades" className="mt-0">
