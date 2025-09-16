@@ -8,7 +8,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* EduPlatform Design System */
+    /* LearnFlow Design System */
     --background: 210 20% 98%; /* #F8F9FA */
     --foreground: 210 20% 13%; /* #202124 */
 
@@ -57,7 +57,7 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Dark mode adaptations for EduPlatform */
+    /* Dark mode adaptations for LearnFlow */
     --background: 210 20% 7%; /* #141517 */
     --foreground: 210 20% 98%; /* #F8F9FA */
 

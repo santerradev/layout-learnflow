@@ -53,10 +53,10 @@ export function AppSidebar() {
       <SidebarHeader>
         <div className="flex items-center gap-3 px-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium">
-            E
+            L
           </div>
           {state === "expanded" && (
-            <span className="font-semibold text-foreground">EduPlatform</span>
+            <span className="font-semibold text-foreground">LearnFlow</span>
           )}
         </div>
       </SidebarHeader>

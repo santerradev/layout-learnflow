@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 /**
  * Header component - simplified for use inside MainLayout
@@ -39,7 +40,11 @@ export const Header = () => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* User menu */}
+      {/* Theme toggle and User menu */}
+      <div className="flex items-center gap-2">
+        <ThemeToggle />
+        
+        {/* User menu */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
@@ -76,7 +81,8 @@ export const Header = () => {
             Sair
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+        </DropdownMenu>
+      </div>
     </div>
   );
 };
