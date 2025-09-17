@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MdSend, MdMoreVert } from 'react-icons/md';
 import { useToast } from '@/hooks/use-toast';
+import { CourseProgressCard } from './CourseProgressCard';
 
 interface MuralTabProps {
   courseId: string;
@@ -79,6 +80,16 @@ export const MuralTab = ({ courseId }: MuralTabProps) => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
+      {/* Course Progress Card */}
+      <CourseProgressCard
+        courseId={courseId}
+        instructor="Prof. João Silva"
+        totalLessons={3}
+        completedLessons={1}
+        totalActivities={2}
+        completedActivities={1}
+      />
+      
       {/* Create Post Form */}
       <Card>
         <CardContent className="p-6">

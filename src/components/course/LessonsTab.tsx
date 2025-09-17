@@ -98,6 +98,7 @@ export const LessonsTab = ({ courseId }: LessonsTabProps) => {
   const [topics, setTopics] = useState<Topic[]>(mockTopics);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set(['1'])); // Mock completed lessons
 
   const handleCreateLesson = (lessonData: any) => {
     console.log('Creating lesson:', lessonData);
@@ -110,6 +111,29 @@ export const LessonsTab = ({ courseId }: LessonsTabProps) => {
 
   const handleBackToList = () => {
     setSelectedLesson(null);
+  };
+
+  const handleCompleteLesson = (lessonId: string) => {
+    setCompletedLessons(prev => new Set([...prev, lessonId]));
+  };
+
+  const handleNextLesson = () => {
+    if (!selectedLesson) return;
+    
+    // Find current lesson and get next one
+    const allLessons = topics.flatMap(topic => topic.lessons);
+    const currentIndex = allLessons.findIndex(lesson => lesson.id === selectedLesson.id);
+    const nextLesson = allLessons[currentIndex + 1];
+    
+    if (nextLesson) {
+      setSelectedLesson(nextLesson);
+    }
+  };
+
+  const getNextLesson = (currentLesson: Lesson) => {
+    const allLessons = topics.flatMap(topic => topic.lessons);
+    const currentIndex = allLessons.findIndex(lesson => lesson.id === currentLesson.id);
+    return allLessons[currentIndex + 1] || null;
   };
 
   // If a lesson is selected, show video player
@@ -132,7 +156,13 @@ export const LessonsTab = ({ courseId }: LessonsTabProps) => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Video Player - Takes 2/3 of the space */}
           <div className="lg:col-span-2">
-            <VideoPlayer lesson={selectedLesson} />
+            <VideoPlayer 
+              lesson={selectedLesson} 
+              isCompleted={completedLessons.has(selectedLesson.id)}
+              onComplete={handleCompleteLesson}
+              onNext={handleNextLesson}
+              hasNext={!!getNextLesson(selectedLesson)}
+            />
           </div>
           
           {/* Playlist Sidebar - Takes 1/3 of the space */}
