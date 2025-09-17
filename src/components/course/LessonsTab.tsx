@@ -9,7 +9,8 @@ import {
   MdAccessTime, 
   MdPeople,
   MdDescription,
-  MdVideoLibrary
+  MdVideoLibrary,
+  MdArrowBack
 } from 'react-icons/md';
 import {
   Dialog,
@@ -20,6 +21,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { CreateLessonForm } from '@/components/course/CreateLessonForm';
+import { VideoPlayer } from '@/components/course/VideoPlayer';
+import { PlaylistSidebar } from '@/components/course/PlaylistSidebar';
 
 interface Lesson {
   id: string;
@@ -94,6 +97,7 @@ const mockTopics: Topic[] = [
 export const LessonsTab = ({ courseId }: LessonsTabProps) => {
   const [topics, setTopics] = useState<Topic[]>(mockTopics);
   const [openDialog, setOpenDialog] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
   const handleCreateLesson = (lessonData: any) => {
     console.log('Creating lesson:', lessonData);
@@ -101,9 +105,48 @@ export const LessonsTab = ({ courseId }: LessonsTabProps) => {
   };
 
   const handlePlayVideo = (lesson: Lesson) => {
-    console.log('Playing video:', lesson.title);
-    // Here you would implement video player logic
+    setSelectedLesson(lesson);
   };
+
+  const handleBackToList = () => {
+    setSelectedLesson(null);
+  };
+
+  // If a lesson is selected, show video player
+  if (selectedLesson) {
+    return (
+      <div className="space-y-6">
+        {/* Back Button */}
+        <div className="flex items-center gap-4">
+          <Button 
+            variant="outline" 
+            onClick={handleBackToList}
+            className="gap-2"
+          >
+            <MdArrowBack className="h-4 w-4" />
+            Voltar para Lista
+          </Button>
+        </div>
+
+        {/* Video Player Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Video Player - Takes 2/3 of the space */}
+          <div className="lg:col-span-2">
+            <VideoPlayer lesson={selectedLesson} />
+          </div>
+          
+          {/* Playlist Sidebar - Takes 1/3 of the space */}
+          <div className="lg:col-span-1">
+            <PlaylistSidebar 
+              topics={topics}
+              currentLesson={selectedLesson}
+              onLessonSelect={setSelectedLesson}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
