@@ -6,15 +6,12 @@ import { Progress } from '@/components/ui/progress';
 import { 
   MdAccessTime, 
   MdPeople, 
-  MdThumbUp,
-  MdThumbDown,
-  MdShare,
-  MdBookmark,
   MdCheckCircle,
   MdSkipNext,
   MdPerson
 } from 'react-icons/md';
 import { useToast } from '@/hooks/use-toast';
+import { CommentsSection } from './CommentsSection';
 
 interface Lesson {
   id: string;
@@ -60,18 +57,6 @@ export const VideoPlayer = ({
       onNext();
     }
   };
-  // Convert URL to embeddable format if it's a YouTube URL
-  const getEmbedUrl = (url: string) => {
-    if (url.includes('youtube.com/watch?v=')) {
-      const videoId = url.split('v=')[1].split('&')[0];
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-    if (url.includes('youtu.be/')) {
-      const videoId = url.split('youtu.be/')[1].split('?')[0];
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-    return url;
-  };
 
   return (
     <div className="space-y-4">
@@ -79,12 +64,12 @@ export const VideoPlayer = ({
       <Card>
         <CardContent className="p-0">
           <div className="aspect-video bg-black rounded-lg overflow-hidden">
-            <iframe
-              src={getEmbedUrl(lesson.videoUrl)}
+            <video
+              src={lesson.videoUrl}
               title={lesson.title}
               className="w-full h-full"
-              allowFullScreen
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              controls
+              controlsList="nodownload"
             />
           </div>
         </CardContent>
@@ -112,46 +97,26 @@ export const VideoPlayer = ({
         </div>
 
         {/* Completion and Navigation Buttons */}
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="gap-2">
-              <MdThumbUp className="h-4 w-4" />
-              Curtir
+        <div className="flex items-center justify-end gap-2">
+          {!isCompleted ? (
+            <Button onClick={handleMarkComplete} className="gap-2">
+              <MdCheckCircle className="h-4 w-4" />
+              Marcar como Concluída
             </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              <MdThumbDown className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              <MdShare className="h-4 w-4" />
-              Compartilhar
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              <MdBookmark className="h-4 w-4" />
-              Salvar
-            </Button>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            {!isCompleted ? (
-              <Button onClick={handleMarkComplete} className="gap-2">
-                <MdCheckCircle className="h-4 w-4" />
-                Marcar como Concluída
-              </Button>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Badge variant="default" className="gap-1 bg-green-600 hover:bg-green-700">
-                  <MdCheckCircle className="h-3 w-3" />
-                  Concluída
-                </Badge>
-                {hasNext && (
-                  <Button onClick={handleNextLesson} className="gap-2">
-                    Próxima Aula
-                    <MdSkipNext className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-            )}
-          </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Badge variant="default" className="gap-1 bg-green-600 hover:bg-green-700">
+                <MdCheckCircle className="h-3 w-3" />
+                Concluída
+              </Badge>
+              {hasNext && (
+                <Button onClick={handleNextLesson} className="gap-2">
+                  Próxima Aula
+                  <MdSkipNext className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Video Progress */}
@@ -187,6 +152,9 @@ export const VideoPlayer = ({
             </div>
           </CardContent>
         </Card>
+
+        {/* Comments Section */}
+        <CommentsSection lessonId={lesson.id} />
       </div>
     </div>
   );
