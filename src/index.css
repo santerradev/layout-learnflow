@@ -24,7 +24,7 @@ All colors MUST be HSL.
     --secondary: 210 17% 38%; /* #5F6368 - Medium Gray */
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 20% 96%; /* #F1F3F4 */
+    --muted: 210 20% 93%; /* Light Gray */
     --muted-foreground: 210 17% 38%; /* #5F6368 */
 
     --accent: 142 76% 39%; /* #00C853 - Success Green */
