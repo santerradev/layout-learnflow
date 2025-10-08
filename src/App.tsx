@@ -13,7 +13,8 @@ import { Cadastro } from "./pages/Cadastro";
 import { Course } from "./pages/Course";
 import { Courses } from "./pages/Courses";
 import { Activities } from "./pages/Activities";
-import { People } from "./pages/People";
+import { People } from "./pages/Users";
+import { AdminDashboard } from "./pages/AdminDashboard";
 import { Materials } from "./pages/Materials";
 import { Profile } from "./pages/Profile";
 import { Notifications } from "./pages/Notifications";
@@ -67,11 +68,21 @@ const App = () => (
               } 
             />
             <Route 
-              path="/pessoas" 
+              path="/usuarios" 
               element={
                 <ProtectedRoute>
                   <MainLayout>
                     <People />
+                  </MainLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <AdminDashboard />
                   </MainLayout>
                 </ProtectedRoute>
               } 

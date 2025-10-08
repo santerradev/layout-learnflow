@@ -65,9 +65,9 @@ const mockPeople = [
 ];
 
 /**
- * People page - Lista todas as pessoas da plataforma
+ * Users page - Lista todas as pessoas da plataforma
  */
-export const People = () => {
+export const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<'all' | 'teachers' | 'students'>('all');
 
@@ -97,7 +97,7 @@ export const People = () => {
       {/* Page Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Pessoas</h1>
+          <h1 className="text-3xl font-bold text-foreground">Usuários</h1>
           <p className="text-muted-foreground">
             Conecte-se com professores e colegas da plataforma
           </p>
@@ -287,3 +287,6 @@ export const People = () => {
     </div>
   );
 };
+
+// Also export as People for backward compatibility
+export const People = Users;

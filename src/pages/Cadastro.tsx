@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 /**
  * Registration page - User sign up
@@ -13,6 +15,7 @@ export const Cadastro = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [userType, setUserType] = useState<'estudante' | 'professor'>('estudante');
   const [isLoading, setIsLoading] = useState(false);
   
   const [errors, setErrors] = useState({
@@ -117,25 +120,52 @@ export const Cadastro = () => {
     setIsLoading(true);
 
     try {
-      // Simulated API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Mock registration - in real app, this would be an API call
-      const userData = { name, email };
-      localStorage.setItem('authToken', 'mock-jwt-token');
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userName', name);
-      
-      toast({
-        title: "Conta criada com sucesso!",
-        description: `Bem-vindo(a), ${name}! Você já está logado na plataforma.`,
-      });
-      
-      navigate('/');
-    } catch (error) {
+      if (userType === 'professor') {
+        // Para professores, criar solicitação pendente
+        const { error: requestError } = await supabase
+          .from('professor_requests')
+          .insert({
+            email,
+            nome: name,
+            password_hash: password, // Em produção, isso seria hasheado no backend
+            status: 'pendente'
+          });
+
+        if (requestError) throw requestError;
+
+        toast({
+          title: "Solicitação enviada!",
+          description: "Sua solicitação para conta de professor foi enviada para aprovação. Você receberá um email quando for aprovada.",
+        });
+        
+        navigate('/login');
+      } else {
+        // Para estudantes, criar conta diretamente
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              nome: name,
+              tipo: userType
+            },
+            emailRedirectTo: `${window.location.origin}/`
+          }
+        });
+
+        if (signUpError) throw signUpError;
+
+        toast({
+          title: "Conta criada com sucesso!",
+          description: `Bem-vindo(a), ${name}!`,
+        });
+        
+        navigate('/');
+      }
+    } catch (error: any) {
       toast({
         title: "Erro ao criar conta",
-        description: "Tente novamente em alguns minutos.",
+        description: error.message || "Tente novamente em alguns minutos.",
         variant: "destructive",
       });
     } finally {
@@ -236,6 +266,20 @@ export const Cadastro = () => {
               {errors.confirmPassword && (
                 <p className="text-sm text-destructive">{errors.confirmPassword}</p>
               )}
+            </div>
+
+            {/* User Type Field */}
+            <div className="space-y-2">
+              <Label htmlFor="userType">Tipo de usuário</Label>
+              <Select value={userType} onValueChange={(value: 'estudante' | 'professor') => setUserType(value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o tipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="estudante">Estudante</SelectItem>
+                  <SelectItem value="professor">Professor</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Register Button */}

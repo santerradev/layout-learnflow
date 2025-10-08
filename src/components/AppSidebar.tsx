@@ -25,10 +25,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 
 const mainItems = [
-  { title: "Dashboard", url: "/", icon: MdHome },
+  { title: "Início", url: "/", icon: MdHome },
   { title: "Meus Cursos", url: "/cursos", icon: MdSchool },
   { title: "Atividades", url: "/atividades", icon: MdAssignment },
-  { title: "Pessoas", url: "/pessoas", icon: MdPeople },
+  { title: "Usuários", url: "/usuarios", icon: MdPeople },
   { title: "Materiais", url: "/materiais", icon: MdFolder },
 ];
 
