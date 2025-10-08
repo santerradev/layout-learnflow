@@ -14,16 +14,110 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      professor_requests: {
+        Row: {
+          email: string
+          id: string
+          nome: string
+          password_hash: string
+          rejection_reason: string | null
+          requested_at: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["request_status"]
+        }
+        Insert: {
+          email: string
+          id?: string
+          nome: string
+          password_hash: string
+          rejection_reason?: string | null
+          requested_at?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+        }
+        Update: {
+          email?: string
+          id?: string
+          nome?: string
+          password_hash?: string
+          rejection_reason?: string | null
+          requested_at?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          foto_url: string | null
+          id: string
+          nome: string
+          status: Database["public"]["Enums"]["user_status"]
+          tipo: Database["public"]["Enums"]["user_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          foto_url?: string | null
+          id: string
+          nome: string
+          status?: Database["public"]["Enums"]["user_status"]
+          tipo?: Database["public"]["Enums"]["user_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          foto_url?: string | null
+          id?: string
+          nome?: string
+          status?: Database["public"]["Enums"]["user_status"]
+          tipo?: Database["public"]["Enums"]["user_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      request_status: "pendente" | "aprovado" | "rejeitado"
+      user_status: "ativo" | "inativo" | "pendente"
+      user_type: "admin" | "professor" | "estudante"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +244,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      request_status: ["pendente", "aprovado", "rejeitado"],
+      user_status: ["ativo", "inativo", "pendente"],
+      user_type: ["admin", "professor", "estudante"],
+    },
   },
 } as const
