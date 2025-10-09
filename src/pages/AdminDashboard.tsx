@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Header } from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -178,10 +177,8 @@ export const AdminDashboard = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 py-6">
+    <div className="max-w-7xl mx-auto">
+      <div className="mb-6">
         <div className="mb-6">
           <h2 className="text-2xl font-medium text-foreground">
             Painel Administrativo
@@ -378,7 +375,7 @@ export const AdminDashboard = () => {
             </Card>
           </TabsContent>
         </Tabs>
-      </main>
+      </div>
     </div>
   );
 };

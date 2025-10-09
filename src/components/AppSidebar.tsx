@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   MdHome, 
@@ -6,7 +7,8 @@ import {
   MdPeople, 
   MdFolder,
   MdSettings,
-  MdNotifications
+  MdNotifications,
+  MdAdminPanelSettings
 } from "react-icons/md";
 import {
   Sidebar,
@@ -23,6 +25,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 const mainItems = [
   { title: "Início", url: "/", icon: MdHome },
@@ -43,6 +46,23 @@ export function AppSidebar() {
   const location = useLocation();
   const { user } = useAuth();
   const currentPath = location.pathname;
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) return;
+      
+      const { data } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', authUser.id)
+        .eq('role', 'admin')
+        .single();
+      setIsAdmin(!!data);
+    };
+    checkAdmin();
+  }, [user]);
 
   const isActive = (path: string) => currentPath === path;
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
@@ -79,6 +99,24 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {isAdmin && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Administrador</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <NavLink to="/admin" className={getNavClass}>
+                      <MdAdminPanelSettings className="h-4 w-4" />
+                      <span>Dashboard Admin</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         <SidebarGroup>
           <SidebarGroupLabel>Conta</SidebarGroupLabel>

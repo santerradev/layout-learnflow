@@ -18,7 +18,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 210 20% 13%;
 
-    --primary: 120 100% 30%; /* Dark Green */
+    --primary: 175 76% 32%; /* #149085 - Teal */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 17% 38%; /* #5F6368 - Medium Gray */
@@ -27,7 +27,7 @@ All colors MUST be HSL.
     --muted: 210 20% 93%; /* Light Gray */
     --muted-foreground: 210 17% 38%; /* #5F6368 */
 
-    --accent: 142 76% 39%; /* #00C853 - Success Green */
+    --accent: 175 76% 32%; /* #149085 - Teal */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -35,7 +35,7 @@ All colors MUST be HSL.
 
     --border: 210 20% 91%; /* #E8EAED */
     --input: 210 20% 91%;
-    --ring: 120 100% 30%;
+    --ring: 175 76% 32%;
 
     --radius: 0.5rem;
 
@@ -67,7 +67,7 @@ All colors MUST be HSL.
     --popover: 210 20% 10%;
     --popover-foreground: 210 20% 98%;
 
-    --primary: 120 100% 30%; /* Keep primary dark green */
+    --primary: 175 76% 32%; /* #149085 - Teal */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 17% 60%; /* Lighter secondary for dark */
@@ -76,7 +76,7 @@ All colors MUST be HSL.
     --muted: 210 20% 15%; /* #252830 */
     --muted-foreground: 210 17% 60%;
 
-    --accent: 142 76% 39%; /* Keep success green */
+    --accent: 175 76% 32%; /* #149085 - Teal */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -84,7 +84,7 @@ All colors MUST be HSL.
 
     --border: 210 20% 20%; /* #32363A */
     --input: 210 20% 20%;
-    --ring: 120 100% 30%;
+    --ring: 175 76% 32%;
     --sidebar-background: 210 20% 7%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
