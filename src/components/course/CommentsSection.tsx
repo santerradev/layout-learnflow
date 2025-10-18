@@ -4,8 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { 
-  MdThumbUp, 
-  MdThumbDown, 
   MdMoreVert,
   MdSend 
 } from 'react-icons/md';
@@ -17,8 +15,6 @@ interface Comment {
   authorInitials: string;
   content: string;
   timestamp: string;
-  likes: number;
-  dislikes: number;
   replies?: Comment[];
 }
 
@@ -34,17 +30,13 @@ const mockComments: Comment[] = [
     authorInitials: 'MS',
     content: 'Excelente explicação! Finalmente entendi os conceitos de vetores. A forma como o professor explicou foi muito clara.',
     timestamp: '2024-01-16T10:30:00Z',
-    likes: 12,
-    dislikes: 0,
     replies: [
       {
         id: '1-1',
         author: 'Prof. João Silva',
         authorInitials: 'JS',
         content: 'Fico feliz que tenha ajudado, Maria! Continue assim.',
-        timestamp: '2024-01-16T11:00:00Z',
-        likes: 5,
-        dislikes: 0
+        timestamp: '2024-01-16T11:00:00Z'
       }
     ]
   },
@@ -53,18 +45,14 @@ const mockComments: Comment[] = [
     author: 'Carlos Lima',
     authorInitials: 'CL',
     content: 'Poderia fazer um exemplo com vetores em 3D na próxima aula? Seria muito útil!',
-    timestamp: '2024-01-16T14:20:00Z',
-    likes: 8,
-    dislikes: 1
+    timestamp: '2024-01-16T14:20:00Z'
   },
   {
     id: '3',
     author: 'Ana Costa',
     authorInitials: 'AC',
     content: 'Muito bom! Estou acompanhando todas as aulas. O material complementar também está excelente.',
-    timestamp: '2024-01-16T16:45:00Z',
-    likes: 6,
-    dislikes: 0
+    timestamp: '2024-01-16T16:45:00Z'
   }
 ];
 
@@ -102,9 +90,7 @@ export const CommentsSection = ({ lessonId }: CommentsSectionProps) => {
         author: 'Você',
         authorInitials: 'VC',
         content: newComment,
-        timestamp: new Date().toISOString(),
-        likes: 0,
-        dislikes: 0
+        timestamp: new Date().toISOString()
       };
 
       setComments(prev => [comment, ...prev]);
@@ -125,21 +111,6 @@ export const CommentsSection = ({ lessonId }: CommentsSectionProps) => {
     }
   };
 
-  const handleLike = (commentId: string) => {
-    setComments(prev => prev.map(comment => 
-      comment.id === commentId 
-        ? { ...comment, likes: comment.likes + 1 }
-        : comment
-    ));
-  };
-
-  const handleDislike = (commentId: string) => {
-    setComments(prev => prev.map(comment => 
-      comment.id === commentId 
-        ? { ...comment, dislikes: comment.dislikes + 1 }
-        : comment
-    ));
-  };
 
   return (
     <Card>
@@ -179,104 +150,64 @@ export const CommentsSection = ({ lessonId }: CommentsSectionProps) => {
         {/* Comments List */}
         <div className="space-y-4">
           {comments.map((comment) => (
-            <div key={comment.id} className="space-y-3">
-              {/* Main Comment */}
-              <div className="flex gap-3">
-                <Avatar className="w-10 h-10">
-                  <AvatarFallback>{comment.authorInitials}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium text-sm">{comment.author}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {formatDate(comment.timestamp)}
-                    </span>
+            <Card key={comment.id} className="animate-fade-in">
+              <CardContent className="p-4">
+                {/* Comment Header */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <Avatar>
+                      <AvatarFallback>{comment.authorInitials}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium text-foreground">{comment.author}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {formatDate(comment.timestamp)}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-sm text-foreground mb-2 leading-relaxed">
-                    {comment.content}
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleLike(comment.id)}
-                      className="h-8 px-2 gap-1 text-muted-foreground hover:text-foreground"
-                    >
-                      <MdThumbUp className="h-3 w-3" />
-                      {comment.likes > 0 && <span className="text-xs">{comment.likes}</span>}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDislike(comment.id)}
-                      className="h-8 px-2 gap-1 text-muted-foreground hover:text-foreground"
-                    >
-                      <MdThumbDown className="h-3 w-3" />
-                      {comment.dislikes > 0 && <span className="text-xs">{comment.dislikes}</span>}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
-                    >
-                      Responder
-                    </Button>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                      <MdMoreVert className="h-3 w-3" />
-                    </Button>
-                  </div>
+                  <Button variant="ghost" size="icon">
+                    <MdMoreVert className="h-4 w-4" />
+                  </Button>
                 </div>
-              </div>
 
-              {/* Replies */}
-              {comment.replies && comment.replies.length > 0 && (
-                <div className="ml-12 space-y-3">
-                  {comment.replies.map((reply) => (
-                    <div key={reply.id} className="flex gap-3">
-                      <Avatar className="w-8 h-8">
-                        <AvatarFallback className="text-xs">{reply.authorInitials}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium text-sm">{reply.author}</span>
-                          <span className="text-xs text-muted-foreground">
-                            {formatDate(reply.timestamp)}
-                          </span>
-                        </div>
-                        <p className="text-sm text-foreground mb-2 leading-relaxed">
-                          {reply.content}
-                        </p>
-                        <div className="flex items-center gap-4">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 px-2 gap-1 text-muted-foreground hover:text-foreground"
-                          >
-                            <MdThumbUp className="h-3 w-3" />
-                            {reply.likes > 0 && <span className="text-xs">{reply.likes}</span>}
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 px-2 gap-1 text-muted-foreground hover:text-foreground"
-                          >
-                            <MdThumbDown className="h-3 w-3" />
-                            {reply.dislikes > 0 && <span className="text-xs">{reply.dislikes}</span>}
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
-                          >
-                            Responder
-                          </Button>
+                {/* Comment Content */}
+                <div className="mb-3">
+                  <p className="text-foreground leading-relaxed">{comment.content}</p>
+                </div>
+
+                {/* Replies */}
+                {comment.replies && comment.replies.length > 0 && (
+                  <div className="border-t pt-3 space-y-3">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Respostas ({comment.replies.length})
+                    </p>
+                    {comment.replies.map((reply) => (
+                      <div key={reply.id} className="flex gap-3">
+                        <Avatar className="w-8 h-8">
+                          <AvatarFallback className="text-xs">
+                            {reply.authorInitials}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-1">
+                            <div>
+                              <p className="text-sm font-medium">{reply.author}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {formatDate(reply.timestamp)}
+                              </p>
+                            </div>
+                            <Button variant="ghost" size="icon" className="h-6 w-6">
+                              <MdMoreVert className="h-3 w-3" />
+                            </Button>
+                          </div>
+                          <p className="text-sm text-muted-foreground">{reply.content}</p>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           ))}
         </div>
 

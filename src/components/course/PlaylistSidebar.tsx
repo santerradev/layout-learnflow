@@ -16,7 +16,6 @@ interface Lesson {
   description: string;
   videoUrl: string;
   duration: string;
-  views: number;
   createdAt: Date;
   topicId: string;
 }
@@ -105,8 +104,6 @@ export const PlaylistSidebar = ({
                             <MdAccessTime className="h-3 w-3" />
                             {lesson.duration}
                           </div>
-                          <span>•</span>
-                          <span>{lesson.views} views</span>
                         </div>
                       </div>
                       {lesson.id !== currentLesson.id && (

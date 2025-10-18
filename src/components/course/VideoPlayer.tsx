@@ -4,11 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { 
-  MdAccessTime, 
-  MdPeople, 
   MdCheckCircle,
-  MdSkipNext,
-  MdPerson
+  MdArrowForward
 } from 'react-icons/md';
 import { useToast } from '@/hooks/use-toast';
 import { CommentsSection } from './CommentsSection';
@@ -19,7 +16,6 @@ interface Lesson {
   description: string;
   videoUrl: string;
   duration: string;
-  views: number;
   createdAt: Date;
   topicId: string;
 }
@@ -81,43 +77,37 @@ export const VideoPlayer = ({
           <h1 className="text-2xl font-bold text-foreground mb-2">
             {lesson.title}
           </h1>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-            <div className="flex items-center gap-1">
-              <MdAccessTime className="h-4 w-4" />
-              {lesson.duration}
-            </div>
-            <div className="flex items-center gap-1">
-              <MdPeople className="h-4 w-4" />
-              {lesson.views} visualizações
-            </div>
-            <Badge variant="secondary">
-              {lesson.createdAt.toLocaleDateString('pt-BR')}
-            </Badge>
+          <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
+            <span>{lesson.duration}</span>
+            <span>•</span>
+            <span>{lesson.createdAt.toLocaleDateString('pt-BR')}</span>
+            {isCompleted && (
+              <>
+                <span>•</span>
+                <Badge variant="default" className="gap-1 bg-green-600 hover:bg-green-700">
+                  <MdCheckCircle className="h-3 w-3" />
+                  Concluída
+                </Badge>
+              </>
+            )}
+            {hasNext && isCompleted && (
+              <Button onClick={handleNextLesson} size="sm" className="gap-2 ml-2">
+                Próxima Aula
+                <MdArrowForward className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </div>
 
-        {/* Completion and Navigation Buttons */}
-        <div className="flex items-center justify-end gap-2">
-          {!isCompleted ? (
+        {/* Mark as Complete Button */}
+        {!isCompleted && (
+          <div>
             <Button onClick={handleMarkComplete} className="gap-2">
               <MdCheckCircle className="h-4 w-4" />
               Marcar como Concluída
             </Button>
-          ) : (
-            <div className="flex items-center gap-2">
-              <Badge variant="default" className="gap-1 bg-green-600 hover:bg-green-700">
-                <MdCheckCircle className="h-3 w-3" />
-                Concluída
-              </Badge>
-              {hasNext && (
-                <Button onClick={handleNextLesson} className="gap-2">
-                  Próxima Aula
-                  <MdSkipNext className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Video Progress */}
         <Card>
@@ -139,17 +129,6 @@ export const VideoPlayer = ({
             <p className="text-muted-foreground leading-relaxed">
               {lesson.description}
             </p>
-            <div className="mt-4 pt-4 border-t">
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <MdPerson className="h-3 w-3" />
-                  Instrutor: Prof. João Silva
-                </div>
-                <div>
-                  Publicado em {lesson.createdAt.toLocaleDateString('pt-BR')}
-                </div>
-              </div>
-            </div>
           </CardContent>
         </Card>
 

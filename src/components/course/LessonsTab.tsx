@@ -30,7 +30,6 @@ interface Lesson {
   description: string;
   videoUrl: string;
   duration: string;
-  views: number;
   createdAt: Date;
   topicId: string;
 }
@@ -59,7 +58,6 @@ const mockTopics: Topic[] = [
         description: 'Introdução aos conceitos básicos de vetores',
         videoUrl: '/videos/algebra-vetores.mp4',
         duration: '45 min',
-        views: 127,
         createdAt: new Date('2024-01-15'),
         topicId: '1'
       },
@@ -69,7 +67,6 @@ const mockTopics: Topic[] = [
         description: 'Soma, subtração e produto escalar de vetores',
         videoUrl: '/videos/algebra-operacoes.mp4',
         duration: '38 min',
-        views: 98,
         createdAt: new Date('2024-01-18'),
         topicId: '1'
       }
@@ -86,7 +83,6 @@ const mockTopics: Topic[] = [
         description: 'Conceitos básicos sobre matrizes',
         videoUrl: '/videos/matrizes-definicao.mp4',
         duration: '42 min',
-        views: 156,
         createdAt: new Date('2024-01-22'),
         topicId: '2'
       }
@@ -256,10 +252,6 @@ export const LessonsTab = ({ courseId }: LessonsTabProps) => {
                             <div className="flex items-center gap-1">
                               <MdAccessTime className="h-3 w-3" />
                               {lesson.duration}
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <MdPeople className="h-3 w-3" />
-                              {lesson.views} visualizações
                             </div>
                           </div>
                         </div>
