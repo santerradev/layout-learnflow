@@ -1,5 +1,6 @@
 import { MdMoreVert, MdAssignment, MdAnnouncement } from 'react-icons/md';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
@@ -14,6 +15,8 @@ interface CourseCardProps {
   section: string;
   teacher: string;
   bannerColor?: string;
+  courseImageUrl?: string;
+  teacherAvatarUrl?: string;
   onClick?: () => void;
 }
 
@@ -27,6 +30,8 @@ export const CourseCard = ({
   section, 
   teacher, 
   bannerColor = 'bg-primary',
+  courseImageUrl,
+  teacherAvatarUrl,
   onClick 
 }: CourseCardProps) => {
   const navigate = useNavigate();
@@ -42,14 +47,21 @@ export const CourseCard = ({
       onClick={handleClick}
     >
       {/* Course Banner */}
-      <div className={`h-20 ${bannerColor} course-banner relative`}>
+      <div className={`h-32 ${bannerColor} course-banner relative overflow-hidden`}>
+        {courseImageUrl && (
+          <img 
+            src={courseImageUrl} 
+            alt={title}
+            className="w-full h-full object-cover"
+          />
+        )}
         <div className="absolute top-3 right-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="text-primary-foreground hover:bg-white/20"
+                className="text-primary-foreground hover:bg-white/20 bg-black/20"
                 onClick={(e) => e.stopPropagation()}
               >
                 <MdMoreVert className="h-5 w-5" />
@@ -83,8 +95,12 @@ export const CourseCard = ({
         </div>
 
         {/* Teacher Info */}
-        <div className="mb-4">
-          <p className="text-sm text-secondary font-medium">
+        <div className="mb-4 flex items-center gap-2">
+          <Avatar className="h-8 w-8">
+            {teacherAvatarUrl && <AvatarImage src={teacherAvatarUrl} alt={teacher} />}
+            <AvatarFallback>{teacher.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <p className="text-sm text-muted-foreground font-medium">
             {teacher}
           </p>
         </div>

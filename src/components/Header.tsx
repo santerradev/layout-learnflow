@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { MdAdd, MdSchool, MdPerson, MdSettings, MdLogout } from 'react-icons/md';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -11,12 +12,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { CreateCourseDialog } from '@/components/CreateCourseDialog';
 
 /**
  * Header component - simplified for use inside MainLayout
  */
 export const Header = () => {
   const { logout, user } = useAuth();
+  const [createCourseOpen, setCreateCourseOpen] = useState(false);
 
   return (
     <div className="flex items-center justify-between w-full">
@@ -25,20 +28,25 @@ export const Header = () => {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="h-10 w-10">
             <MdAdd className="h-5 w-5" />
-            <span className="sr-only">Criar ou participar de turma</span>
+            <span className="sr-only">Criar ou participar de curso</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
             <MdSchool className="mr-2 h-4 w-4" />
-            Participar da turma
+            Participar de curso
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setCreateCourseOpen(true)}>
             <MdAdd className="mr-2 h-4 w-4" />
-            Criar turma
+            Criar curso
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <CreateCourseDialog 
+        open={createCourseOpen} 
+        onOpenChange={setCreateCourseOpen} 
+      />
 
       {/* Theme toggle and User menu */}
       <div className="flex items-center gap-2">
