@@ -27,21 +27,20 @@ interface CreateLessonFormProps {
   onCancel: () => void;
 }
 
-type ContentType = 'lesson' | 'task' | 'material' | 'topic';
+type ContentType = 'topic' | 'lesson' | 'task' | 'material';
 
 export const CreateLessonForm = ({ topics, onSubmit, onCancel }: CreateLessonFormProps) => {
-  const [contentType, setContentType] = useState<ContentType>('lesson');
+  const [contentType, setContentType] = useState<ContentType>('topic');
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     videoUrl: '',
-    duration: '',
+    videoFile: null as File | null,
     topicId: '',
     // Task specific
     dueDate: '',
-    points: '',
     // Material specific
-    fileUrl: '',
+    materialFile: null as File | null,
     fileType: '',
     // Topic specific
     topicTitle: '',
@@ -53,7 +52,7 @@ export const CreateLessonForm = ({ topics, onSubmit, onCancel }: CreateLessonFor
     onSubmit({ ...formData, type: contentType });
   };
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: string | File | null) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -61,6 +60,10 @@ export const CreateLessonForm = ({ topics, onSubmit, onCancel }: CreateLessonFor
     <form onSubmit={handleSubmit} className="space-y-6">
       <Tabs value={contentType} onValueChange={(value) => setContentType(value as ContentType)}>
         <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="topic" className="gap-2">
+            <MdTopic className="h-4 w-4" />
+            Tópico
+          </TabsTrigger>
           <TabsTrigger value="lesson" className="gap-2">
             <MdVideoLibrary className="h-4 w-4" />
             Aula
@@ -73,11 +76,42 @@ export const CreateLessonForm = ({ topics, onSubmit, onCancel }: CreateLessonFor
             <MdFolder className="h-4 w-4" />
             Material
           </TabsTrigger>
-          <TabsTrigger value="topic" className="gap-2">
-            <MdTopic className="h-4 w-4" />
-            Tópico
-          </TabsTrigger>
         </TabsList>
+
+        {/* Topic Form - Now First */}
+        <TabsContent value="topic" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MdTopic className="h-5 w-5" />
+                Novo Tópico
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="topicTitle">Título do Tópico</Label>
+                <Input
+                  id="topicTitle"
+                  value={formData.topicTitle}
+                  onChange={(e) => handleInputChange('topicTitle', e.target.value)}
+                  placeholder="Ex: Álgebra Linear"
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="topicDescription">Descrição</Label>
+                <Textarea
+                  id="topicDescription"
+                  value={formData.topicDescription}
+                  onChange={(e) => handleInputChange('topicDescription', e.target.value)}
+                  placeholder="Descreva o tópico..."
+                  required
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         {/* Lesson Form */}
         <TabsContent value="lesson" className="space-y-4">
@@ -89,27 +123,15 @@ export const CreateLessonForm = ({ topics, onSubmit, onCancel }: CreateLessonFor
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Título da Aula</Label>
-                  <Input
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) => handleInputChange('title', e.target.value)}
-                    placeholder="Ex: Introdução aos Vetores"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="duration">Duração</Label>
-                  <Input
-                    id="duration"
-                    value={formData.duration}
-                    onChange={(e) => handleInputChange('duration', e.target.value)}
-                    placeholder="Ex: 45 min"
-                    required
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="title">Título da Aula</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => handleInputChange('title', e.target.value)}
+                  placeholder="Ex: Introdução aos Vetores"
+                  required
+                />
               </div>
               
               <div className="space-y-2">
@@ -123,33 +145,52 @@ export const CreateLessonForm = ({ topics, onSubmit, onCancel }: CreateLessonFor
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="videoUrl">URL do Vídeo</Label>
-                  <Input
-                    id="videoUrl"
-                    type="url"
-                    value={formData.videoUrl}
-                    onChange={(e) => handleInputChange('videoUrl', e.target.value)}
-                    placeholder="https://..."
-                    required
-                  />
+              <div className="space-y-2">
+                <Label htmlFor="topicId">Tópico</Label>
+                <Select value={formData.topicId} onValueChange={(value) => handleInputChange('topicId', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione um tópico" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {topics.map((topic) => (
+                      <SelectItem key={topic.id} value={topic.id}>
+                        {topic.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Vídeo</Label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="videoUrl" className="text-sm text-muted-foreground">
+                      URL do YouTube
+                    </Label>
+                    <Input
+                      id="videoUrl"
+                      type="url"
+                      value={formData.videoUrl}
+                      onChange={(e) => handleInputChange('videoUrl', e.target.value)}
+                      placeholder="https://youtube.com/..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="videoFile" className="text-sm text-muted-foreground">
+                      Upload de Vídeo
+                    </Label>
+                    <Input
+                      id="videoFile"
+                      type="file"
+                      accept="video/*"
+                      onChange={(e) => handleInputChange('videoFile', e.target.files?.[0] || null)}
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="topicId">Tópico</Label>
-                  <Select value={formData.topicId} onValueChange={(value) => handleInputChange('topicId', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um tópico" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {topics.map((topic) => (
-                        <SelectItem key={topic.id} value={topic.id}>
-                          {topic.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <p className="text-xs text-muted-foreground">
+                  Forneça uma URL do YouTube ou faça upload de um vídeo
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -165,28 +206,15 @@ export const CreateLessonForm = ({ topics, onSubmit, onCancel }: CreateLessonFor
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="taskTitle">Título da Tarefa</Label>
-                  <Input
-                    id="taskTitle"
-                    value={formData.title}
-                    onChange={(e) => handleInputChange('title', e.target.value)}
-                    placeholder="Ex: Exercícios de Vetores"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="points">Pontuação</Label>
-                  <Input
-                    id="points"
-                    type="number"
-                    value={formData.points}
-                    onChange={(e) => handleInputChange('points', e.target.value)}
-                    placeholder="100"
-                    required
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="taskTitle">Título da Tarefa</Label>
+                <Input
+                  id="taskTitle"
+                  value={formData.title}
+                  onChange={(e) => handleInputChange('title', e.target.value)}
+                  placeholder="Ex: Exercícios de Vetores"
+                  required
+                />
               </div>
               
               <div className="space-y-2">
@@ -241,31 +269,15 @@ export const CreateLessonForm = ({ topics, onSubmit, onCancel }: CreateLessonFor
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="materialTitle">Título do Material</Label>
-                  <Input
-                    id="materialTitle"
-                    value={formData.title}
-                    onChange={(e) => handleInputChange('title', e.target.value)}
-                    placeholder="Ex: Apostila de Vetores"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="fileType">Tipo de Arquivo</Label>
-                  <Select value={formData.fileType} onValueChange={(value) => handleInputChange('fileType', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o tipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pdf">PDF</SelectItem>
-                      <SelectItem value="doc">Documento</SelectItem>
-                      <SelectItem value="ppt">Apresentação</SelectItem>
-                      <SelectItem value="link">Link Externo</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="materialTitle">Título do Material</Label>
+                <Input
+                  id="materialTitle"
+                  value={formData.title}
+                  onChange={(e) => handleInputChange('title', e.target.value)}
+                  placeholder="Ex: Apostila de Vetores"
+                  required
+                />
               </div>
               
               <div className="space-y-2">
@@ -279,68 +291,49 @@ export const CreateLessonForm = ({ topics, onSubmit, onCancel }: CreateLessonFor
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="fileUrl">URL do Arquivo</Label>
-                  <Input
-                    id="fileUrl"
-                    type="url"
-                    value={formData.fileUrl}
-                    onChange={(e) => handleInputChange('fileUrl', e.target.value)}
-                    placeholder="https://..."
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="materialTopicId">Tópico</Label>
-                  <Select value={formData.topicId} onValueChange={(value) => handleInputChange('topicId', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um tópico" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {topics.map((topic) => (
-                        <SelectItem key={topic.id} value={topic.id}>
-                          {topic.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="topicId">Tópico</Label>
+                <Select value={formData.topicId} onValueChange={(value) => handleInputChange('topicId', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione um tópico" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {topics.map((topic) => (
+                      <SelectItem key={topic.id} value={topic.id}>
+                        {topic.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
 
-        {/* Topic Form */}
-        <TabsContent value="topic" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MdTopic className="h-5 w-5" />
-                Novo Tópico
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="topicTitle">Título do Tópico</Label>
-                <Input
-                  id="topicTitle"
-                  value={formData.topicTitle}
-                  onChange={(e) => handleInputChange('topicTitle', e.target.value)}
-                  placeholder="Ex: Álgebra Linear"
-                  required
-                />
+                <Label htmlFor="fileType">Tipo de Arquivo</Label>
+                <Select value={formData.fileType} onValueChange={(value) => handleInputChange('fileType', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pdf">PDF</SelectItem>
+                    <SelectItem value="doc">Documento</SelectItem>
+                    <SelectItem value="ppt">Apresentação</SelectItem>
+                    <SelectItem value="image">Imagem</SelectItem>
+                    <SelectItem value="other">Outro</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              
+
               <div className="space-y-2">
-                <Label htmlFor="topicDescription">Descrição</Label>
-                <Textarea
-                  id="topicDescription"
-                  value={formData.topicDescription}
-                  onChange={(e) => handleInputChange('topicDescription', e.target.value)}
-                  placeholder="Descreva o tópico..."
-                  required
+                <Label htmlFor="materialFile">Upload de Arquivo</Label>
+                <Input
+                  id="materialFile"
+                  type="file"
+                  onChange={(e) => handleInputChange('materialFile', e.target.files?.[0] || null)}
+                  accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.zip"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Formatos aceitos: PDF, DOC, PPT, imagens, ZIP
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -353,9 +346,9 @@ export const CreateLessonForm = ({ topics, onSubmit, onCancel }: CreateLessonFor
           Cancelar
         </Button>
         <Button type="submit">
-          Criar {contentType === 'lesson' ? 'Aula' : 
-                 contentType === 'task' ? 'Tarefa' : 
-                 contentType === 'material' ? 'Material' : 'Tópico'}
+          Criar {contentType === 'topic' ? 'Tópico' :
+                 contentType === 'lesson' ? 'Aula' : 
+                 contentType === 'task' ? 'Tarefa' : 'Material'}
         </Button>
       </div>
     </form>

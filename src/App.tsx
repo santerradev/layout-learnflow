@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import { Login } from "./pages/Login";
 import { Cadastro } from "./pages/Cadastro";
 import { Course } from "./pages/Course";
+import { Lesson } from "./pages/Lesson";
 import { Courses } from "./pages/Courses";
 import { Activities } from "./pages/Activities";
 import { People } from "./pages/Users";
@@ -108,6 +109,16 @@ const App = () => (
               } 
             />
             <Route 
+              path="/curso/:id/aula/:lessonId" 
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Lesson />
+                  </MainLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route
               path="/perfil" 
               element={
                 <ProtectedRoute>

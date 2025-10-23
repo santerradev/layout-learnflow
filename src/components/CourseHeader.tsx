@@ -10,7 +10,7 @@ interface CourseHeaderProps {
  */
 export const CourseHeader = ({ title, section, teacher, bannerColor }: CourseHeaderProps) => {
   return (
-    <div className="bg-[hsl(var(--course-banner))] text-course-banner-foreground relative overflow-hidden">
+    <div className="bg-[hsl(var(--course-banner))] text-white relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute -right-4 -top-4 w-24 h-24 rounded-full border-2 border-white/30"></div>
@@ -21,7 +21,7 @@ export const CourseHeader = ({ title, section, teacher, bannerColor }: CourseHea
       {/* Content */}
       <div className="relative max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-medium">{title}</h1>
+          <h1 className="text-3xl font-medium text-white">{title}</h1>
           <p className="text-white/90 text-lg">{section}</p>
           <p className="text-white/80">{teacher}</p>
         </div>
