@@ -18,10 +18,10 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 210 20% 13%;
 
-    --primary: 142 76% 36%; /* #15B877 - Green */
+    --primary: 175 76% 32%; /* #149085 - Teal */
     --primary-foreground: 0 0% 100%;
     
-    --course-banner: 142 76% 36%; /* Green for course banners */
+    --course-banner: 175 76% 32%; /* Teal for course banners */
     --course-banner-foreground: 0 0% 100%;
 
     --secondary: 210 17% 38%; /* #5F6368 - Medium Gray */
@@ -70,10 +70,10 @@ All colors MUST be HSL.
     --popover: 210 20% 10%;
     --popover-foreground: 210 20% 98%;
 
-    --primary: 142 76% 36%; /* #15B877 - Green */
+    --primary: 175 76% 32%; /* #149085 - Teal */
     --primary-foreground: 0 0% 100%;
     
-    --course-banner: 142 76% 36%; /* Green for course banners */
+    --course-banner: 175 76% 32%; /* Teal for course banners */
     --course-banner-foreground: 0 0% 100%;
 
     --secondary: 210 17% 60%; /* Lighter secondary for dark */
