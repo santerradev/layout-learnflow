@@ -15,12 +15,15 @@ export default function Chat() {
             onSelectConversation={setSelectedConversationId}
           />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           {selectedConversationId ? (
             <ChatWindow conversationId={selectedConversationId} />
           ) : (
-            <div className="h-full flex items-center justify-center text-muted-foreground">
-              Selecione uma conversa para começar
+            <div className="h-full flex items-center justify-center">
+              <div className="text-center text-muted-foreground">
+                <p className="text-lg font-medium">Bem-vindo ao Chat</p>
+                <p className="text-sm mt-2">Selecione uma conversa ou inicie uma nova</p>
+              </div>
             </div>
           )}
         </div>

@@ -147,32 +147,39 @@ export function ConversationList({ selectedConversationId, onSelectConversation 
 
       <ScrollArea className="flex-1">
         <div className="p-2 space-y-2">
-          {conversations.map((conversation) => (
-            <button
-              key={conversation.id}
-              onClick={() => onSelectConversation(conversation.id)}
-              className={`w-full p-3 rounded-lg text-left hover:bg-accent transition-colors ${
-                selectedConversationId === conversation.id ? 'bg-accent' : ''
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <Avatar>
-                  <AvatarImage src={getConversationAvatar(conversation) || undefined} />
-                  <AvatarFallback>
-                    {getConversationName(conversation).charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{getConversationName(conversation)}</p>
-                  {conversation.lastMessage && (
-                    <p className="text-sm text-muted-foreground truncate">
-                      {conversation.lastMessage.content}
-                    </p>
-                  )}
+          {conversations.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <p className="text-sm">Nenhuma conversa ainda</p>
+              <p className="text-xs mt-2">Clique no botão acima para iniciar</p>
+            </div>
+          ) : (
+            conversations.map((conversation) => (
+              <button
+                key={conversation.id}
+                onClick={() => onSelectConversation(conversation.id)}
+                className={`w-full p-3 rounded-lg text-left hover:bg-accent transition-colors ${
+                  selectedConversationId === conversation.id ? 'bg-accent' : ''
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Avatar>
+                    <AvatarImage src={getConversationAvatar(conversation) || undefined} />
+                    <AvatarFallback>
+                      {getConversationName(conversation).charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{getConversationName(conversation)}</p>
+                    {conversation.lastMessage && (
+                      <p className="text-sm text-muted-foreground truncate">
+                        {conversation.lastMessage.content}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))
+          )}
         </div>
       </ScrollArea>
 

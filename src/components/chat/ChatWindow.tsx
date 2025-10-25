@@ -51,8 +51,24 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           table: 'messages',
           filter: `conversation_id=eq.${conversationId}`,
         },
-        (payload) => {
-          fetchMessages();
+        async (payload) => {
+          const newMsg = payload.new as any;
+          
+          const { data: senderData } = await supabase
+            .from('profiles')
+            .select('nome, foto_url')
+            .eq('id', newMsg.sender_id)
+            .single();
+
+          if (senderData) {
+            setMessages((prev) => [...prev, {
+              id: newMsg.id,
+              content: newMsg.content,
+              sender_id: newMsg.sender_id,
+              created_at: newMsg.created_at,
+              sender: senderData
+            }]);
+          }
         }
       )
       .subscribe();
@@ -74,7 +90,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         content,
         sender_id,
         created_at,
-        sender:profiles!messages_sender_id_fkey(
+        profiles!messages_sender_id_fkey(
           nome,
           foto_url
         )
@@ -91,7 +107,15 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       return;
     }
 
-    setMessages(data as any);
+    const formattedMessages = data.map((msg: any) => ({
+      id: msg.id,
+      content: msg.content,
+      sender_id: msg.sender_id,
+      created_at: msg.created_at,
+      sender: msg.profiles
+    }));
+
+    setMessages(formattedMessages);
   };
 
   const scrollToBottom = () => {
@@ -104,10 +128,13 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     e.preventDefault();
     if (!newMessage.trim() || !currentUserId) return;
 
+    const messageContent = newMessage.trim();
+    setNewMessage('');
+
     const { error } = await supabase.from('messages').insert({
       conversation_id: conversationId,
       sender_id: currentUserId,
-      content: newMessage.trim(),
+      content: messageContent,
     });
 
     if (error) {
@@ -116,10 +143,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         description: error.message,
         variant: 'destructive',
       });
+      setNewMessage(messageContent);
       return;
     }
-
-    setNewMessage('');
   };
 
   const formatTime = (timestamp: string) => {
@@ -131,36 +157,45 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     <Card className="h-full flex flex-col">
       <ScrollArea className="flex-1 p-4" ref={scrollRef}>
         <div className="space-y-4">
-          {messages.map((message) => {
-            const isOwn = message.sender_id === currentUserId;
-            return (
-              <div
-                key={message.id}
-                className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}
-              >
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={message.sender.foto_url || undefined} />
-                  <AvatarFallback>
-                    {message.sender.nome.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className={`flex flex-col ${isOwn ? 'items-end' : ''}`}>
-                  <div
-                    className={`rounded-lg px-4 py-2 max-w-md ${
-                      isOwn
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
-                    }`}
-                  >
-                    <p className="text-sm">{message.content}</p>
-                  </div>
-                  <span className="text-xs text-muted-foreground mt-1">
-                    {formatTime(message.created_at)}
-                  </span>
-                </div>
+          {messages.length === 0 ? (
+            <div className="h-full flex items-center justify-center text-center text-muted-foreground">
+              <div>
+                <p className="text-sm">Nenhuma mensagem ainda</p>
+                <p className="text-xs mt-2">Envie a primeira mensagem!</p>
               </div>
-            );
-          })}
+            </div>
+          ) : (
+            messages.map((message) => {
+              const isOwn = message.sender_id === currentUserId;
+              return (
+                <div
+                  key={message.id}
+                  className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}
+                >
+                  <Avatar className="h-8 w-8 flex-shrink-0">
+                    <AvatarImage src={message.sender.foto_url || undefined} />
+                    <AvatarFallback>
+                      {message.sender.nome.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className={`flex flex-col ${isOwn ? 'items-end' : ''} max-w-[70%]`}>
+                    <div
+                      className={`rounded-lg px-4 py-2 ${
+                        isOwn
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted'
+                      }`}
+                    >
+                      <p className="text-sm break-words">{message.content}</p>
+                    </div>
+                    <span className="text-xs text-muted-foreground mt-1">
+                      {formatTime(message.created_at)}
+                    </span>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
       </ScrollArea>
 
@@ -169,10 +204,17 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           <Input
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage(e);
+              }
+            }}
             placeholder="Digite sua mensagem..."
             className="flex-1"
+            autoFocus
           />
-          <Button type="submit" size="icon">
+          <Button type="submit" size="icon" disabled={!newMessage.trim()}>
             <Send className="h-4 w-4" />
           </Button>
         </div>
