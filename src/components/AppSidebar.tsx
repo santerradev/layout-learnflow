@@ -9,7 +9,8 @@ import {
   MdSettings,
   MdNotifications,
   MdAdminPanelSettings,
-  MdDashboard
+  MdDashboard,
+  MdChat
 } from "react-icons/md";
 import {
   Sidebar,
@@ -35,6 +36,7 @@ const mainItems = [
   { title: "Atividades", url: "/atividades", icon: MdAssignment },
   { title: "Usuários", url: "/usuarios", icon: MdPeople },
   { title: "Materiais", url: "/materiais", icon: MdFolder },
+  { title: "Chat", url: "/chat", icon: MdChat },
 ];
 
 const settingsItems = [
