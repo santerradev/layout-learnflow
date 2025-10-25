@@ -31,9 +31,12 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    const init = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('Chat - Current user:', user?.id);
       setCurrentUserId(user?.id || null);
-    });
+    };
+    init();
   }, []);
 
   useEffect(() => {
@@ -83,6 +86,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   }, [messages]);
 
   const fetchMessages = async () => {
+    console.log('Fetching messages for conversation:', conversationId);
+    
     const { data, error } = await supabase
       .from('messages')
       .select(`
@@ -99,6 +104,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       .order('created_at', { ascending: true });
 
     if (error) {
+      console.error('Error fetching messages:', error);
       toast({
         title: 'Erro ao carregar mensagens',
         description: error.message,
@@ -106,6 +112,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       });
       return;
     }
+
+    console.log('Messages loaded:', data?.length);
 
     const formattedMessages = data.map((msg: any) => ({
       id: msg.id,
@@ -131,6 +139,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     const messageContent = newMessage.trim();
     setNewMessage('');
 
+    console.log('Sending message:', messageContent);
+
     const { error } = await supabase.from('messages').insert({
       conversation_id: conversationId,
       sender_id: currentUserId,
@@ -138,6 +148,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     });
 
     if (error) {
+      console.error('Error sending message:', error);
       toast({
         title: 'Erro ao enviar mensagem',
         description: error.message,
@@ -146,6 +157,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       setNewMessage(messageContent);
       return;
     }
+
+    console.log('Message sent successfully');
   };
 
   const formatTime = (timestamp: string) => {

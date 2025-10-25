@@ -36,9 +36,12 @@ export function ConversationList({ selectedConversationId, onSelectConversation 
   const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    const init = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('ConversationList - Current user:', user?.id);
       setCurrentUserId(user?.id || null);
-    });
+    };
+    init();
   }, []);
 
   useEffect(() => {
@@ -49,6 +52,8 @@ export function ConversationList({ selectedConversationId, onSelectConversation 
 
   const fetchConversations = async () => {
     if (!currentUserId) return;
+
+    console.log('Fetching conversations for user:', currentUserId);
 
     const { data, error } = await supabase
       .from('conversation_participants')
@@ -62,6 +67,7 @@ export function ConversationList({ selectedConversationId, onSelectConversation 
       .eq('user_id', currentUserId);
 
     if (error) {
+      console.error('Error fetching conversations:', error);
       toast({
         title: 'Erro ao carregar conversas',
         description: error.message,
@@ -70,8 +76,15 @@ export function ConversationList({ selectedConversationId, onSelectConversation 
       return;
     }
 
+    console.log('Conversations loaded:', data?.length);
+
     const conversationIds = data.map(d => d.conversation_id);
     
+    if (conversationIds.length === 0) {
+      setConversations([]);
+      return;
+    }
+
     const { data: participantsData } = await supabase
       .from('conversation_participants')
       .select(`
@@ -121,7 +134,9 @@ export function ConversationList({ selectedConversationId, onSelectConversation 
       }
     });
 
-    setConversations(Array.from(conversationsMap.values()));
+    const conversationsList = Array.from(conversationsMap.values());
+    console.log('Final conversations:', conversationsList.length);
+    setConversations(conversationsList);
   };
 
   const getConversationName = (conversation: Conversation) => {
