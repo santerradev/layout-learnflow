@@ -180,6 +180,12 @@ export const Login = () => {
                 Cadastre-se
               </Link>
             </div>
+
+            <div className="text-xs text-muted-foreground">
+              <Link to="/generate-test-users" className="hover:text-foreground">
+                Gerar usuários de teste para chat
+              </Link>
+            </div>
           </div>
 
           {/* Demo Credentials */}

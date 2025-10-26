@@ -21,6 +21,7 @@ import { Profile } from "./pages/Profile";
 import { Notifications } from "./pages/Notifications";
 import { Settings } from "./pages/Settings";
 import Chat from "./pages/Chat";
+import { GenerateTestUsers } from "./pages/GenerateTestUsers";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/generate-test-users" element={<GenerateTestUsers />} />
             
             {/* Protected Routes */}
             <Route 
