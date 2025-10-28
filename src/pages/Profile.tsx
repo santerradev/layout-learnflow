@@ -13,8 +13,6 @@ import {
   MdCancel,
   MdSchool,
   MdEmail,
-  MdPhone,
-  MdLocationOn,
   MdCalendarToday
 } from 'react-icons/md';
 import { useAuth } from '@/hooks/useAuth';
@@ -32,9 +30,6 @@ export const Profile = () => {
   const [formData, setFormData] = useState({
     name: user?.name || 'João Silva',
     email: user?.email || 'joao.silva@edu.com',
-    phone: '+55 (11) 99999-9999',
-    location: 'São Paulo, SP',
-    bio: 'Professor de Matemática com 10 anos de experiência. Apaixonado por ensinar e aprender.',
     institution: 'Universidade de São Paulo',
     role: 'Professor'
   });
@@ -70,9 +65,6 @@ export const Profile = () => {
     setFormData({
       name: user?.name || 'João Silva',
       email: user?.email || 'joao.silva@edu.com',
-      phone: '+55 (11) 99999-9999',
-      location: 'São Paulo, SP',
-      bio: 'Professor de Matemática com 10 anos de experiência. Apaixonado por ensinar e aprender.',
       institution: 'Universidade de São Paulo',
       role: 'Professor'
     });
@@ -144,14 +136,6 @@ export const Profile = () => {
                 <span className="text-muted-foreground truncate">{formData.email}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                <MdPhone className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground">{formData.phone}</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm">
-                <MdLocationOn className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground">{formData.location}</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm">
                 <MdCalendarToday className="h-4 w-4 text-muted-foreground" />
                 <span className="text-muted-foreground">Membro desde Jan 2024</span>
               </div>
@@ -187,24 +171,6 @@ export const Profile = () => {
                     disabled={!isEditing}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Telefone</Label>
-                  <Input
-                    id="phone"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="location">Localização</Label>
-                  <Input
-                    id="location"
-                    value={formData.location}
-                    onChange={(e) => handleInputChange('location', e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </div>
               </div>
             </CardContent>
           </Card>
@@ -235,17 +201,6 @@ export const Profile = () => {
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="bio">Biografia</Label>
-                <Textarea
-                  id="bio"
-                  value={formData.bio}
-                  onChange={(e) => handleInputChange('bio', e.target.value)}
-                  disabled={!isEditing}
-                  className="min-h-[100px]"
-                  placeholder="Conte um pouco sobre você..."
-                />
-              </div>
             </CardContent>
           </Card>
 
@@ -255,22 +210,18 @@ export const Profile = () => {
               <CardTitle>Estatísticas</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">8</div>
                   <div className="text-sm text-muted-foreground">Cursos</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">124</div>
-                  <div className="text-sm text-muted-foreground">Alunos</div>
+                  <div className="text-2xl font-bold text-primary">32</div>
+                  <div className="text-sm text-muted-foreground">Aulas</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">45</div>
                   <div className="text-sm text-muted-foreground">Atividades</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">98%</div>
-                  <div className="text-sm text-muted-foreground">Satisfação</div>
                 </div>
               </div>
             </CardContent>
