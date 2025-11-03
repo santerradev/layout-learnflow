@@ -27,18 +27,18 @@ interface ActivitiesTabProps {
 const mockTopics = [
   {
     id: '1',
-    title: 'Funções Logarítmicas',
+    title: 'Fundamentos de Programação',
     activities: [
       {
         id: '1',
-        title: 'Lista de Exercícios - Logaritmos',
-        type: 'assignment',
+        title: 'Lista de Exercícios - Variáveis e Tipos',
+        type: 'quiz',
         dueDate: '2024-01-25',
         status: 'pending'
       },
       {
         id: '2',
-        title: 'Material de Apoio - Propriedades dos Logaritmos',
+        title: 'Material de Apoio - Sintaxe JavaScript',
         type: 'material',
         dueDate: null,
         status: 'available'
@@ -47,18 +47,18 @@ const mockTopics = [
   },
   {
     id: '2',
-    title: 'Funções Exponenciais',
+    title: 'Estruturas de Dados',
     activities: [
       {
         id: '3',
-        title: 'Questionário - Funções Exponenciais',
+        title: 'Questionário - Arrays e Objetos',
         type: 'quiz',
         dueDate: '2024-01-30',
         status: 'pending'
       },
       {
         id: '4',
-        title: 'Prova - Funções e Logaritmos',
+        title: 'Prova - Algoritmos e Lógica',
         type: 'assignment',
         dueDate: '2024-02-05',
         status: 'upcoming'
@@ -181,9 +181,7 @@ export const ActivitiesTab = ({ courseId }: ActivitiesTabProps) => {
                       key={activity.id}
                       className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/30 transition-colors cursor-pointer"
                       onClick={() => {
-                        if (activity.type === 'quiz') {
-                          navigate(`/quiz/${activity.id}`);
-                        }
+                        navigate(`/quiz/${activity.id}`);
                       }}
                     >
                       <div className="flex items-center gap-3">

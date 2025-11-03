@@ -45,23 +45,23 @@ interface LessonsTabProps {
 const mockTopics: Topic[] = [
   {
     id: '1',
-    title: 'Introdução à Álgebra Linear',
-    description: 'Conceitos fundamentais de álgebra linear',
+    title: 'Introdução à Programação',
+    description: 'Conceitos fundamentais de programação',
     lessons: [
       {
         id: '1',
-        title: 'Vetores e Espaços Vetoriais',
-        description: 'Introdução aos conceitos básicos de vetores',
-        videoUrl: '/videos/algebra-vetores.mp4',
+        title: 'Variáveis e Tipos de Dados',
+        description: 'Introdução aos conceitos básicos de variáveis e tipos',
+        videoUrl: '/videos/variaveis-tipos.mp4',
         duration: '45 min',
         createdAt: new Date('2024-01-15'),
         topicId: '1'
       },
       {
         id: '2',
-        title: 'Operações com Vetores',
-        description: 'Soma, subtração e produto escalar de vetores',
-        videoUrl: '/videos/algebra-operacoes.mp4',
+        title: 'Estruturas de Controle',
+        description: 'If, else, loops e estruturas condicionais',
+        videoUrl: '/videos/estruturas-controle.mp4',
         duration: '38 min',
         createdAt: new Date('2024-01-18'),
         topicId: '1'
@@ -70,16 +70,25 @@ const mockTopics: Topic[] = [
   },
   {
     id: '2',
-    title: 'Matrizes e Determinantes',
-    description: 'Estudo de matrizes e cálculo de determinantes',
+    title: 'Funções e Algoritmos',
+    description: 'Criação de funções e algoritmos básicos',
     lessons: [
       {
         id: '3',
-        title: 'Definição e Tipos de Matrizes',
-        description: 'Conceitos básicos sobre matrizes',
-        videoUrl: '/videos/matrizes-definicao.mp4',
+        title: 'Criando Funções em JavaScript',
+        description: 'Como criar e utilizar funções',
+        videoUrl: '/videos/funcoes-js.mp4',
         duration: '42 min',
         createdAt: new Date('2024-01-22'),
+        topicId: '2'
+      },
+      {
+        id: '4',
+        title: 'Algoritmos de Ordenação',
+        description: 'Bubble sort, selection sort e insertion sort',
+        videoUrl: '/videos/algoritmos-ordenacao.mp4',
+        duration: '50 min',
+        createdAt: new Date('2024-01-25'),
         topicId: '2'
       }
     ]

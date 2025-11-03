@@ -10,11 +10,11 @@ import { PeopleTab } from '@/components/course/PeopleTab';
 // Mock course data
 const mockCourse = {
   id: '1',
-  title: 'Matemática Avançada',
+  title: 'Curso Programação',
   section: '3º Ano - Turma A',
   teacher: 'Prof. Ana Silva',
   bannerColor: 'bg-blue-500',
-  description: 'Curso focado em matemática avançada para ensino médio'
+  description: 'Curso focado em programação e desenvolvimento de software'
 };
 
 type TabValue = 'mural' | 'aulas' | 'atividades' | 'pessoas';
