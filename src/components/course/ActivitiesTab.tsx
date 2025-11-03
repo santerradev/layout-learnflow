@@ -74,6 +74,7 @@ export const ActivitiesTab = ({ courseId }: ActivitiesTabProps) => {
   const navigate = useNavigate();
   const [expandedTopics, setExpandedTopics] = useState<string[]>(['1']);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [activityType, setActivityType] = useState<'quiz' | 'assignment' | 'material'>('quiz');
 
   const toggleTopic = (topicId: string) => {
     setExpandedTopics(prev => 
@@ -132,15 +133,24 @@ export const ActivitiesTab = ({ courseId }: ActivitiesTabProps) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setCreateDialogOpen(true)}>
+            <DropdownMenuItem onClick={() => {
+              setActivityType('quiz');
+              setCreateDialogOpen(true);
+            }}>
               <MdQuiz className="h-4 w-4 mr-2" />
               Questionário
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {
+              setActivityType('assignment');
+              setCreateDialogOpen(true);
+            }}>
               <MdAssignment className="h-4 w-4 mr-2" />
               Tarefa
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {
+              setActivityType('material');
+              setCreateDialogOpen(true);
+            }}>
               <MdFolder className="h-4 w-4 mr-2" />
               Material
             </DropdownMenuItem>
@@ -214,6 +224,7 @@ export const ActivitiesTab = ({ courseId }: ActivitiesTabProps) => {
       open={createDialogOpen}
       onOpenChange={setCreateDialogOpen}
       courseId={courseId}
+      activityType={activityType}
     />
 
     {/* Empty State */}
