@@ -22,6 +22,7 @@ import { Notifications } from "./pages/Notifications";
 import { Settings } from "./pages/Settings";
 import Chat from "./pages/Chat";
 import { GenerateTestUsers } from "./pages/GenerateTestUsers";
+import { TakeQuiz } from "./pages/TakeQuiz";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -156,6 +157,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Chat />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/quiz/:quizId" 
+              element={
+                <ProtectedRoute>
+                  <TakeQuiz />
                 </ProtectedRoute>
               } 
             />

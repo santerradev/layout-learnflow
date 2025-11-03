@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { CreateActivityDialog } from './CreateActivityDialog';
 
 interface ActivitiesTabProps {
   courseId: string;
@@ -69,7 +71,9 @@ const mockTopics = [
  * Activities Tab component - displays course activities organized by topics
  */
 export const ActivitiesTab = ({ courseId }: ActivitiesTabProps) => {
+  const navigate = useNavigate();
   const [expandedTopics, setExpandedTopics] = useState<string[]>(['1']);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   const toggleTopic = (topicId: string) => {
     setExpandedTopics(prev => 
@@ -128,6 +132,10 @@ export const ActivitiesTab = ({ courseId }: ActivitiesTabProps) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setCreateDialogOpen(true)}>
+              <MdQuiz className="h-4 w-4 mr-2" />
+              Questionário
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <MdAssignment className="h-4 w-4 mr-2" />
               Tarefa
@@ -135,10 +143,6 @@ export const ActivitiesTab = ({ courseId }: ActivitiesTabProps) => {
             <DropdownMenuItem>
               <MdFolder className="h-4 w-4 mr-2" />
               Material
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <MdQuiz className="h-4 w-4 mr-2" />
-              Questionário
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -176,6 +180,11 @@ export const ActivitiesTab = ({ courseId }: ActivitiesTabProps) => {
                     <div
                       key={activity.id}
                       className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/30 transition-colors cursor-pointer"
+                      onClick={() => {
+                        if (activity.type === 'quiz') {
+                          navigate(`/quiz/${activity.id}`);
+                        }
+                      }}
                     >
                       <div className="flex items-center gap-3">
                         {getActivityIcon(activity.type)}
@@ -200,11 +209,17 @@ export const ActivitiesTab = ({ courseId }: ActivitiesTabProps) => {
               </CardContent>
             )}
           </Card>
-        ))}
-      </div>
+      ))}
+    </div>
 
-      {/* Empty State */}
-      {mockTopics.length === 0 && (
+    <CreateActivityDialog
+      open={createDialogOpen}
+      onOpenChange={setCreateDialogOpen}
+      courseId={courseId}
+    />
+
+    {/* Empty State */}
+    {mockTopics.length === 0 && (
         <Card>
           <CardContent className="p-12 text-center">
             <div className="space-y-2">
