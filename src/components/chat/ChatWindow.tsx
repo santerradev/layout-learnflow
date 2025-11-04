@@ -167,9 +167,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   };
 
   return (
-    <Card className="h-full flex flex-col">
-      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-        <div className="space-y-4">
+    <Card className="h-full flex flex-col bg-background">
+      <div className="flex-1 overflow-hidden relative">
+        <ScrollArea className="h-full px-4 py-6" ref={scrollRef}>
+          <div className="space-y-3">
           {messages.length === 0 ? (
             <div className="h-full flex items-center justify-center text-center text-muted-foreground">
               <div>
@@ -183,37 +184,53 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
               return (
                 <div
                   key={message.id}
-                  className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}
+                  className={`flex gap-2 ${isOwn ? 'justify-end' : 'justify-start'}`}
                 >
-                  <Avatar className="h-8 w-8 flex-shrink-0">
-                    <AvatarImage src={message.sender.foto_url || undefined} />
-                    <AvatarFallback>
-                      {message.sender.nome.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className={`flex flex-col ${isOwn ? 'items-end' : ''} max-w-[70%]`}>
+                  {!isOwn && (
+                    <Avatar className="h-8 w-8 flex-shrink-0">
+                      <AvatarImage src={message.sender.foto_url || undefined} />
+                      <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                        {message.sender.nome.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+                  <div className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'} max-w-[75%]`}>
+                    {!isOwn && (
+                      <span className="text-xs font-medium text-foreground mb-1 px-2">
+                        {message.sender.nome}
+                      </span>
+                    )}
                     <div
-                      className={`rounded-lg px-4 py-2 ${
+                      className={`rounded-2xl px-4 py-2 shadow-sm ${
                         isOwn
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted'
+                          ? 'bg-primary text-primary-foreground rounded-br-sm'
+                          : 'bg-muted text-foreground rounded-bl-sm'
                       }`}
                     >
-                      <p className="text-sm break-words">{message.content}</p>
+                      <p className="text-sm break-words whitespace-pre-wrap">{message.content}</p>
                     </div>
-                    <span className="text-xs text-muted-foreground mt-1">
+                    <span className="text-xs text-muted-foreground mt-1 px-2">
                       {formatTime(message.created_at)}
                     </span>
                   </div>
+                  {isOwn && (
+                    <Avatar className="h-8 w-8 flex-shrink-0">
+                      <AvatarImage src={message.sender.foto_url || undefined} />
+                      <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                        {message.sender.nome.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
                 </div>
               );
             })
           )}
-        </div>
-      </ScrollArea>
+          </div>
+        </ScrollArea>
+      </div>
 
-      <form onSubmit={sendMessage} className="p-4 border-t">
-        <div className="flex gap-2">
+      <form onSubmit={sendMessage} className="p-4 border-t bg-background/95 backdrop-blur">
+        <div className="flex gap-2 items-end">
           <Input
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
@@ -224,10 +241,15 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
               }
             }}
             placeholder="Digite sua mensagem..."
-            className="flex-1"
+            className="flex-1 rounded-full bg-muted border-0 focus-visible:ring-1"
             autoFocus
           />
-          <Button type="submit" size="icon" disabled={!newMessage.trim()}>
+          <Button 
+            type="submit" 
+            size="icon" 
+            disabled={!newMessage.trim()}
+            className="rounded-full h-10 w-10 shrink-0"
+          >
             <Send className="h-4 w-4" />
           </Button>
         </div>

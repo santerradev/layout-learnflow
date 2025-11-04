@@ -21,6 +21,7 @@ import { Profile } from "./pages/Profile";
 import { Notifications } from "./pages/Notifications";
 import { Settings } from "./pages/Settings";
 import Chat from "./pages/Chat";
+import ChatConversation from "./pages/ChatConversation";
 import { GenerateTestUsers } from "./pages/GenerateTestUsers";
 import { TakeQuiz } from "./pages/TakeQuiz";
 import NotFound from "./pages/NotFound";
@@ -157,6 +158,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Chat />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/chat/:conversationId" 
+              element={
+                <ProtectedRoute>
+                  <ChatConversation />
                 </ProtectedRoute>
               } 
             />
