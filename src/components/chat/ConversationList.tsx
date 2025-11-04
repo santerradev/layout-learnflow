@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -7,6 +8,27 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { MessageSquarePlus } from 'lucide-react';
 import { NewConversationDialog } from './NewConversationDialog';
 import { useToast } from '@/hooks/use-toast';
+
+// Mock conversations
+const mockConversations: Conversation[] = [
+  {
+    id: 'mock-pedro-1',
+    updated_at: new Date().toISOString(),
+    participants: [
+      {
+        user_id: 'pedro-123',
+        profiles: {
+          nome: 'Pedro Silva',
+          foto_url: null,
+        }
+      }
+    ],
+    lastMessage: {
+      content: 'Olá! Como você está?',
+      created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    }
+  }
+];
 
 interface Conversation {
   id: string;
@@ -30,9 +52,10 @@ interface ConversationListProps {
 }
 
 export function ConversationList({ selectedConversationId, onSelectConversation }: ConversationListProps) {
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>(mockConversations);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [showNewConversation, setShowNewConversation] = useState(false);
+  const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -136,7 +159,9 @@ export function ConversationList({ selectedConversationId, onSelectConversation 
 
     const conversationsList = Array.from(conversationsMap.values());
     console.log('Final conversations:', conversationsList.length);
-    setConversations(conversationsList);
+    
+    // Merge with mock conversations
+    setConversations([...mockConversations, ...conversationsList]);
   };
 
   const getConversationName = (conversation: Conversation) => {
@@ -171,7 +196,7 @@ export function ConversationList({ selectedConversationId, onSelectConversation 
             conversations.map((conversation) => (
               <button
                 key={conversation.id}
-                onClick={() => onSelectConversation(conversation.id)}
+                onClick={() => navigate(`/chat/${conversation.id}`)}
                 className={`w-full p-3 rounded-lg text-left hover:bg-accent transition-colors ${
                   selectedConversationId === conversation.id ? 'bg-accent' : ''
                 }`}

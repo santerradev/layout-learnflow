@@ -8,6 +8,30 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+// Mock messages for Pedro conversation
+const mockMessages: Message[] = [
+  {
+    id: 'msg-1',
+    content: 'Oi! Tudo bem?',
+    sender_id: 'pedro-123',
+    created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+    sender: {
+      nome: 'Pedro Silva',
+      foto_url: null,
+    }
+  },
+  {
+    id: 'msg-2',
+    content: 'Você viu o material da aula de Programação?',
+    sender_id: 'pedro-123',
+    created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    sender: {
+      nome: 'Pedro Silva',
+      foto_url: null,
+    }
+  }
+];
+
 interface Message {
   id: string;
   content: string;
@@ -24,7 +48,8 @@ interface ChatWindowProps {
 }
 
 export function ChatWindow({ conversationId }: ChatWindowProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const isMockConversation = conversationId.startsWith('mock-');
+  const [messages, setMessages] = useState<Message[]>(isMockConversation ? mockMessages : []);
   const [newMessage, setNewMessage] = useState('');
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -40,7 +65,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   }, []);
 
   useEffect(() => {
-    if (!conversationId) return;
+    if (!conversationId || isMockConversation) return;
 
     fetchMessages();
 
@@ -140,6 +165,37 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     setNewMessage('');
 
     console.log('Sending message:', messageContent);
+
+    // Handle mock conversation
+    if (isMockConversation) {
+      const newMsg: Message = {
+        id: `msg-${Date.now()}`,
+        content: messageContent,
+        sender_id: currentUserId,
+        created_at: new Date().toISOString(),
+        sender: {
+          nome: 'Você',
+          foto_url: null,
+        }
+      };
+      setMessages(prev => [...prev, newMsg]);
+      
+      // Simulate Pedro's response after 2 seconds
+      setTimeout(() => {
+        const pedroResponse: Message = {
+          id: `msg-pedro-${Date.now()}`,
+          content: 'Legal! Vou dar uma olhada também.',
+          sender_id: 'pedro-123',
+          created_at: new Date().toISOString(),
+          sender: {
+            nome: 'Pedro Silva',
+            foto_url: null,
+          }
+        };
+        setMessages(prev => [...prev, pedroResponse]);
+      }, 2000);
+      return;
+    }
 
     const { error } = await supabase.from('messages').insert({
       conversation_id: conversationId,
