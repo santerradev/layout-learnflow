@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -48,14 +47,13 @@ interface Conversation {
 
 interface ConversationListProps {
   selectedConversationId: string | null;
-  onSelectConversation: (id: string) => void;
+  onSelectConversation: (id: string, name: string) => void;
 }
 
 export function ConversationList({ selectedConversationId, onSelectConversation }: ConversationListProps) {
   const [conversations, setConversations] = useState<Conversation[]>(mockConversations);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [showNewConversation, setShowNewConversation] = useState(false);
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -193,32 +191,35 @@ export function ConversationList({ selectedConversationId, onSelectConversation 
               <p className="text-xs mt-2">Clique no botão acima para iniciar</p>
             </div>
           ) : (
-            conversations.map((conversation) => (
-              <button
-                key={conversation.id}
-                onClick={() => navigate(`/chat/${conversation.id}`)}
-                className={`w-full p-3 rounded-lg text-left hover:bg-accent transition-colors ${
-                  selectedConversationId === conversation.id ? 'bg-accent' : ''
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Avatar>
-                    <AvatarImage src={getConversationAvatar(conversation) || undefined} />
-                    <AvatarFallback>
-                      {getConversationName(conversation).charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate">{getConversationName(conversation)}</p>
-                    {conversation.lastMessage && (
-                      <p className="text-sm text-muted-foreground truncate">
-                        {conversation.lastMessage.content}
-                      </p>
-                    )}
+            conversations.map((conversation) => {
+              const name = getConversationName(conversation);
+              return (
+                <button
+                  key={conversation.id}
+                  onClick={() => onSelectConversation(conversation.id, name)}
+                  className={`w-full p-3 rounded-lg text-left hover:bg-accent transition-colors ${
+                    selectedConversationId === conversation.id ? 'bg-accent' : ''
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Avatar>
+                      <AvatarImage src={getConversationAvatar(conversation) || undefined} />
+                      <AvatarFallback>
+                        {name.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium truncate">{name}</p>
+                      {conversation.lastMessage && (
+                        <p className="text-sm text-muted-foreground truncate">
+                          {conversation.lastMessage.content}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </button>
-            ))
+                </button>
+              );
+            })
           )}
         </div>
       </ScrollArea>
@@ -228,7 +229,10 @@ export function ConversationList({ selectedConversationId, onSelectConversation 
         onOpenChange={setShowNewConversation}
         onConversationCreated={(id) => {
           fetchConversations();
-          onSelectConversation(id);
+          const newConv = conversations.find(c => c.id === id);
+          if (newConv) {
+            onSelectConversation(id, getConversationName(newConv));
+          }
         }}
       />
     </Card>
