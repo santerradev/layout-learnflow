@@ -17,7 +17,9 @@ interface CourseCardProps {
   bannerColor?: string;
   courseImageUrl?: string;
   teacherAvatarUrl?: string;
+  isEnrolled?: boolean;
   onClick?: () => void;
+  onDelete?: () => void;
 }
 
 /**
@@ -32,7 +34,9 @@ export const CourseCard = ({
   bannerColor = 'bg-primary',
   courseImageUrl,
   teacherAvatarUrl,
-  onClick 
+  isEnrolled = true,
+  onClick,
+  onDelete
 }: CourseCardProps) => {
   const navigate = useNavigate();
 
@@ -47,13 +51,15 @@ export const CourseCard = ({
       onClick={handleClick}
     >
       {/* Course Banner */}
-      <div className={`h-32 ${bannerColor} course-banner relative overflow-hidden`}>
-        {courseImageUrl && (
+      <div className={`h-32 ${courseImageUrl ? '' : bannerColor} course-banner relative overflow-hidden`}>
+        {courseImageUrl ? (
           <img 
             src={courseImageUrl} 
             alt={title}
             className="w-full h-full object-cover"
           />
+        ) : (
+          <div className={`w-full h-full ${bannerColor}`} />
         )}
         <div className="absolute top-3 right-3">
           <DropdownMenu>
@@ -71,11 +77,14 @@ export const CourseCard = ({
               <DropdownMenuItem>
                 <span>Editar</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <span>Configurações</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive">
-                <span>Arquivar</span>
+              <DropdownMenuItem 
+                className="text-destructive"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete?.();
+                }}
+              >
+                <span>Excluir</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -105,25 +114,18 @@ export const CourseCard = ({
           </p>
         </div>
 
-        {/* Quick Actions */}
-        <div className="flex justify-end gap-2 pt-2 border-t border-border">
+        {/* Action Button */}
+        <div className="flex justify-end pt-2 border-t border-border">
           <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-secondary hover:text-foreground"
-            onClick={(e) => e.stopPropagation()}
+            variant={isEnrolled ? "default" : "secondary"}
+            size="sm"
+            className={isEnrolled ? "bg-green-600 hover:bg-green-700 text-white" : ""}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClick();
+            }}
           >
-            <MdAssignment className="h-4 w-4 mr-1" />
-            Atividades
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-secondary hover:text-foreground"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <MdAnnouncement className="h-4 w-4 mr-1" />
-            Mural
+            {isEnrolled ? "Acessar" : "Inscrever-se"}
           </Button>
         </div>
       </div>
