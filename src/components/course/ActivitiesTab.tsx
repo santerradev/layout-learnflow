@@ -129,7 +129,7 @@ export const ActivitiesTab = ({ courseId }: ActivitiesTabProps) => {
           <DropdownMenuTrigger asChild>
             <Button className="flex items-center gap-2">
               <MdAdd className="h-4 w-4" />
-              Criar
+              Nova atividade
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
