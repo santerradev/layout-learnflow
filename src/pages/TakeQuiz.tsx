@@ -147,28 +147,58 @@ export const TakeQuiz = () => {
               <div className="text-left space-y-4 pt-6">
                 <h3 className="text-xl font-semibold mb-4">Respostas Detalhadas:</h3>
                 {mockQuiz.questions.map((question, index) => {
-                  const isCorrect = userAnswers[index] === question.correct;
+                  const userAnswer = userAnswers[index];
+                  const isCorrect = userAnswer === question.correct;
+                  
                   return (
-                    <div key={index} className="border rounded-lg p-4 space-y-2">
-                      <div className="flex items-start gap-2">
+                    <div key={index} className="p-4 border rounded-lg space-y-3">
+                      <div className="flex items-start justify-between mb-3">
+                        <h3 className="font-medium">
+                          {index + 1}. {question.question}
+                        </h3>
                         {isCorrect ? (
-                          <MdCheck className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                          <Badge className="bg-green-500 hover:bg-green-600">Correto</Badge>
                         ) : (
-                          <MdClose className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+                          <Badge variant="destructive">Incorreto</Badge>
                         )}
-                        <div className="flex-1">
-                          <p className="font-medium">{question.question}</p>
-                          <p className="text-sm text-muted-foreground mt-2">
-                            Sua resposta: <span className={isCorrect ? 'text-green-600' : 'text-red-600'}>
-                              {question.options[userAnswers[index] ?? -1] || 'Não respondida'}
-                            </span>
-                          </p>
-                          {!isCorrect && (
-                            <p className="text-sm text-green-600 mt-1">
-                              Resposta correta: {question.options[question.correct]}
-                            </p>
-                          )}
-                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        {question.options.map((option, optionIndex) => {
+                          const isUserAnswer = userAnswer === optionIndex;
+                          const isCorrectAnswer = optionIndex === question.correct;
+                          
+                          let className = "p-3 rounded-lg border-2 ";
+                          
+                          if (isCorrectAnswer) {
+                            className += "bg-green-50 dark:bg-green-950/30 border-green-500 text-green-700 dark:text-green-400";
+                          } else if (isUserAnswer && !isCorrect) {
+                            className += "bg-red-50 dark:bg-red-950/30 border-red-500 text-red-700 dark:text-red-400";
+                          } else {
+                            className += "bg-muted/30 border-muted";
+                          }
+                          
+                          return (
+                            <div key={optionIndex} className={className}>
+                              <div className="flex items-start gap-2">
+                                <span className="font-medium">
+                                  {String.fromCharCode(65 + optionIndex)}.
+                                </span>
+                                <span className="flex-1">{option}</span>
+                                {isCorrectAnswer && (
+                                  <Badge className="bg-green-500 hover:bg-green-600 text-white ml-2">
+                                    Correta
+                                  </Badge>
+                                )}
+                                {isUserAnswer && !isCorrect && (
+                                  <Badge variant="destructive" className="ml-2">
+                                    Sua resposta
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   );

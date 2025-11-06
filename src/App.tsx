@@ -173,7 +173,9 @@ const App = () => (
               path="/quiz/:quizId" 
               element={
                 <ProtectedRoute>
-                  <TakeQuiz />
+                  <MainLayout>
+                    <TakeQuiz />
+                  </MainLayout>
                 </ProtectedRoute>
               } 
             />
