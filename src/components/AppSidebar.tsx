@@ -35,6 +35,7 @@ const mainItems = [
   { title: "Atividades", url: "/atividades", icon: MdAssignment },
   { title: "Materiais", url: "/materiais", icon: MdFolder },
   { title: "Chat", url: "/chat", icon: MdChat },
+  { title: "Dashboard", url: "/admin", icon: MdDashboard },
 ];
 
 const settingsItems = [
@@ -102,23 +103,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {isAdmin && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Admin</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="/admin" className={getNavClass}>
-                      <MdDashboard className="h-4 w-4" />
-                      <span>Dashboard</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
 
         <SidebarGroup>
           <SidebarGroupLabel>Conta</SidebarGroupLabel>
