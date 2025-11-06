@@ -31,10 +31,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 const mainItems = [
   { title: "Início", url: "/", icon: MdHome },
-  { title: "Dashboard", url: "/admin", icon: MdDashboard },
   { title: "Meus Cursos", url: "/cursos", icon: MdSchool },
   { title: "Atividades", url: "/atividades", icon: MdAssignment },
-  { title: "Usuários", url: "/usuarios", icon: MdPeople },
   { title: "Materiais", url: "/materiais", icon: MdFolder },
   { title: "Chat", url: "/chat", icon: MdChat },
 ];
@@ -106,14 +104,14 @@ export function AppSidebar() {
 
         {isAdmin && (
           <SidebarGroup>
-            <SidebarGroupLabel>Administrador</SidebarGroupLabel>
+            <SidebarGroupLabel>Admin</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <NavLink to="/admin" className={getNavClass}>
-                      <MdAdminPanelSettings className="h-4 w-4" />
-                      <span>Dashboard Admin</span>
+                      <MdDashboard className="h-4 w-4" />
+                      <span>Dashboard</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
