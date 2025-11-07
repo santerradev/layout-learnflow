@@ -15,6 +15,7 @@ import { Lesson } from "./pages/Lesson";
 import { Courses } from "./pages/Courses";
 import { Activities } from "./pages/Activities";
 import { People } from "./pages/Users";
+import { Dashboard } from "./pages/Dashboard";
 import { AdminDashboard } from "./pages/AdminDashboard";
 import { Materials } from "./pages/Materials";
 import { Profile } from "./pages/Profile";
@@ -79,6 +80,16 @@ const App = () => (
                 <ProtectedRoute>
                   <MainLayout>
                     <People />
+                  </MainLayout>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Dashboard />
                   </MainLayout>
                 </ProtectedRoute>
               } 

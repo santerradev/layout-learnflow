@@ -120,3 +120,67 @@ All colors MUST be HSL.
     @apply bg-gradient-to-r from-primary to-primary/80;
   }
 }
+
+/* React Big Calendar custom styles */
+.rbc-calendar {
+  font-family: 'Roboto', sans-serif;
+}
+
+.rbc-header {
+  padding: 10px 3px;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.rbc-today {
+  background-color: hsl(var(--accent) / 0.1);
+}
+
+.rbc-event {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: 4px;
+  border: none;
+  padding: 2px 5px;
+}
+
+.rbc-event.rbc-selected {
+  background-color: hsl(var(--primary));
+}
+
+.rbc-toolbar button {
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--background));
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.rbc-toolbar button:hover {
+  background-color: hsl(var(--accent) / 0.1);
+}
+
+.rbc-toolbar button.rbc-active {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+
+.rbc-month-view {
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rbc-day-bg {
+  border-left: 1px solid hsl(var(--border));
+}
+
+.rbc-month-row {
+  border-top: 1px solid hsl(var(--border));
+}
+
+.rbc-off-range-bg {
+  background-color: hsl(var(--muted));
+}

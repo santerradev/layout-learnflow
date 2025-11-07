@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      activities: {
+        Row: {
+          course_id: string
+          created_at: string | null
+          data_entrega: string
+          descricao: string | null
+          id: string
+          pontos: number | null
+          tipo: string
+          titulo: string
+          updated_at: string | null
+        }
+        Insert: {
+          course_id: string
+          created_at?: string | null
+          data_entrega: string
+          descricao?: string | null
+          id?: string
+          pontos?: number | null
+          tipo: string
+          titulo: string
+          updated_at?: string | null
+        }
+        Update: {
+          course_id?: string
+          created_at?: string | null
+          data_entrega?: string
+          descricao?: string | null
+          id?: string
+          pontos?: number | null
+          tipo?: string
+          titulo?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activities_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversation_participants: {
         Row: {
           conversation_id: string
@@ -65,6 +109,68 @@ export type Database = {
           created_at?: string
           id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      course_enrollments: {
+        Row: {
+          course_id: string
+          enrolled_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          course_id: string
+          enrolled_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          course_id?: string
+          enrolled_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_enrollments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses: {
+        Row: {
+          cor_banner: string | null
+          created_at: string | null
+          descricao: string | null
+          id: string
+          imagem_url: string | null
+          professor_id: string
+          titulo: string
+          updated_at: string | null
+        }
+        Insert: {
+          cor_banner?: string | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          imagem_url?: string | null
+          professor_id: string
+          titulo: string
+          updated_at?: string | null
+        }
+        Update: {
+          cor_banner?: string | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          imagem_url?: string | null
+          professor_id?: string
+          titulo?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
