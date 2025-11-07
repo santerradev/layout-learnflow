@@ -31,6 +31,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     if (token && email) {
       setUser({ email, name: name || undefined });
+    } else {
+      // Auto-login para desenvolvimento
+      const mockUser = { email: 'user@edu.com', name: 'Usuário Demo' };
+      localStorage.setItem('authToken', 'mock-jwt-token');
+      localStorage.setItem('userEmail', mockUser.email);
+      localStorage.setItem('userName', mockUser.name);
+      setUser(mockUser);
     }
     
     setIsLoading(false);
