@@ -5,7 +5,14 @@ import heroImage from '@/assets/hero-workspace.jpg';
 
 const Landing = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-secondary/20 animate-gradient-shift" />
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/30 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-secondary/30 rounded-full blur-3xl animate-float-delayed" />
+      </div>
+
       {/* Header */}
       <header className="container mx-auto px-6 lg:px-12 py-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
