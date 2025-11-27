@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { MainLayout } from "@/components/MainLayout";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import { Login } from "./pages/Login";
 import { Cadastro } from "./pages/Cadastro";
@@ -39,13 +40,14 @@ const App = () => (
           <BrowserRouter>
           <Routes>
             {/* Public Routes */}
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/generate-test-users" element={<GenerateTestUsers />} />
             
             {/* Protected Routes */}
             <Route 
-              path="/" 
+              path="/inicio" 
               element={
                 <ProtectedRoute>
                   <MainLayout>
