@@ -8,9 +8,10 @@ const Landing = () => {
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-background to-secondary/30 animate-gradient-shift" />
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/40 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-secondary/40 rounded-full blur-3xl animate-float-delayed" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/50 via-background to-primary/30 animate-gradient-shift" />
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/60 rounded-full blur-3xl animate-float" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-primary/50 rounded-full blur-3xl animate-float-delayed" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-primary/30 rounded-full blur-3xl animate-float" style={{ animationDelay: '5s' }} />
       </div>
 
       {/* Header */}
