@@ -30,7 +30,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 const mainItems = [
-  { title: "Início", url: "/", icon: MdHome },
+  { title: "Início", url: "/inicio", icon: MdHome },
   { title: "Dashboard", url: "/dashboard", icon: MdDashboard },
   { title: "Meus Cursos", url: "/cursos", icon: MdSchool },
   { title: "Atividades", url: "/atividades", icon: MdAssignment },
